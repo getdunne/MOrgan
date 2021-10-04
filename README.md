@@ -1,6 +1,4 @@
 # MOrgan - "More than Organ"
-**NOTE this is a work in progress. I am holding off uploading code until I receive permission from one of the copyright holders.**
-
 This is a small collection of open-source audio plug-ins inspired by the basic design of [Hammond tone-wheel organs](https://en.wikipedia.org/wiki/Hammond_organ). These are NOT intended to serve as a "B-3 emulator"--if that's what you're looking for, have a look at the excellent (and free) [CollaB3 by Sampleson](https://sampleson.com/collab3-free-tonewheel-organ.html), or any of the many B-3 and "clonewheel" organ plug-ins available commercially.
 
 ## Goals of the MOrgan project
@@ -35,7 +33,11 @@ The [GNU General Public License v3](https://www.gnu.org/licenses/gpl-3.0.en.html
 
 The core DSP code files originally published as part of [AudioKit](https://audiokit.io/) are (as noted in each file) themselves licensed under the more permissive [MIT License](https://opensource.org/licenses/MIT), which *does permit use in closed-source projects*.
 
-The rotary-speaker emulation code from the [setBfree project](https://setbfree.org/) was originally published under the [GPL version 2 license](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html), whose terms are a bit more restrictive than the later GPL v3. As of the time of writing, I am seeking formal permission from the developers, to incorporate this code into this GPL3-licensed code base.
+The rotary-speaker emulation code from the [setBfree project](https://setbfree.org/) was originally published under the [GPL version 2 license](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html), whose terms are a bit more restrictive than the later GPL v3. In response to my written request, [Dr. Robin Gareus](https://github.com/x42) has provided the following points of clarification:
+
+> setBfree is licensed in terms of GPLv2+ "either version 2, or (at your option) any later version" (b_whirl/whirl.c:8-11).
+>
+> It is entirely valid to mix GPLv2+ and GPLv3 code in the same codebase. The resulting binary however has to be licensed in terms of the GPLv3.
 
 It is up to you to familiarize yourself with the legal ramifications of how you choose to use this code. Shane Dunne and Shane Dunne & Associates, Inc. provides this code *on an as-is basis, with no warranty of any kind*, and *will not be responsible for any legal consequences arising from your own use of the source code*.
 

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="IXkp6K" name="MOrgan Osc" projectType="audioplug" companyName="MOrgan"
+              pluginManufacturerCode="MOrg" headerPath="../../../AudioKit/AKCommon&#10;../../../AudioKit/AKSynth&#10;../../../Common&#10;../../kissfft"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              reportAppUsage="0" displaySplashScreen="0" projectLineFeed="&#10;"
+              companyCopyright="(c)2021 Shane Dunne" companyWebsite="https://github.com/getdunne/MOrgan"
+              pluginCode="MOsc" jucerFormatVersion="1" version="1.0.0">
+  <MAINGROUP id="HQPykZ" name="MOrgan Osc">
+    <GROUP id="{56B95B31-9F66-1522-7F2F-47B5134DE254}" name="Assets">
+      <FILE id="wvHp4K" name="Logo-M.png" compile="0" resource="1" file="../Assets/Logo-M.png"/>
+      <FILE id="SW8tBs" name="NumberStrip.png" compile="0" resource="1" file="../Assets/NumberStrip.png"/>
+    </GROUP>
+    <GROUP id="{1D4BA84E-E9D7-DAD1-2425-D38C5A2B26E8}" name="AudioKit">
+      <GROUP id="{E3CF89DC-F28C-6A75-F37F-FC67125CC394}" name="AKCommon">
+        <FILE id="DGvMYK" name="ADSREnvelope.cpp" compile="1" resource="0"
+              file="../AudioKit/AKCommon/ADSREnvelope.cpp"/>
+        <FILE id="FfMwQ8" name="ADSREnvelope.hpp" compile="0" resource="0"
+              file="../AudioKit/AKCommon/ADSREnvelope.hpp"/>
+        <FILE id="xHI4uo" name="EnvelopeGeneratorBase.cpp" compile="1" resource="0"
+              file="../AudioKit/AKCommon/EnvelopeGeneratorBase.cpp"/>
+        <FILE id="R7cyZD" name="EnvelopeGeneratorBase.hpp" compile="0" resource="0"
+              file="../AudioKit/AKCommon/EnvelopeGeneratorBase.hpp"/>
+        <FILE id="U15EbL" name="FunctionTable.cpp" compile="1" resource="0"
+              file="../AudioKit/AKCommon/FunctionTable.cpp"/>
+        <FILE id="b5NZJZ" name="FunctionTable.hpp" compile="0" resource="0"
+              file="../AudioKit/AKCommon/FunctionTable.hpp"/>
+        <FILE id="e2Lwos" name="LinearRamper.hpp" compile="0" resource="0"
+              file="../AudioKit/AKCommon/LinearRamper.hpp"/>
+        <FILE id="UoMCUZ" name="SustainPedalLogic.cpp" compile="1" resource="0"
+              file="../AudioKit/AKCommon/SustainPedalLogic.cpp"/>
+        <FILE id="pBsvkx" name="SustainPedalLogic.hpp" compile="0" resource="0"
+              file="../AudioKit/AKCommon/SustainPedalLogic.hpp"/>
+        <FILE id="NaiLhj" name="VoiceBase.cpp" compile="1" resource="0" file="../AudioKit/AKCommon/VoiceBase.cpp"/>
+        <FILE id="GbxME9" name="VoiceBase.hpp" compile="0" resource="0" file="../AudioKit/AKCommon/VoiceBase.hpp"/>
+        <FILE id="R590I8" name="VoiceManager.cpp" compile="1" resource="0"
+              file="../AudioKit/AKCommon/VoiceManager.cpp"/>
+        <FILE id="X3M8C6" name="VoiceManager.hpp" compile="0" resource="0"
+              file="../AudioKit/AKCommon/VoiceManager.hpp"/>
+      </GROUP>
+      <GROUP id="{411A1629-B8DE-8F1C-48AB-AEFBD6DA2013}" name="AKSynth">
+        <FILE id="D3HgGt" name="DrawbarsOscillator.cpp" compile="1" resource="0"
+              file="../AudioKit/AKSynth/DrawbarsOscillator.cpp"/>
+        <FILE id="v0X5Vs" name="DrawbarsOscillator.hpp" compile="0" resource="0"
+              file="../AudioKit/AKSynth/DrawbarsOscillator.hpp"/>
+        <FILE id="wYIpnt" name="Envelope.cpp" compile="1" resource="0" file="../AudioKit/AKSynth/Envelope.cpp"/>
+        <FILE id="cKGd94" name="Envelope.hpp" compile="0" resource="0" file="../AudioKit/AKSynth/Envelope.hpp"/>
+        <FILE id="Pk3zBi" name="Organ.cpp" compile="1" resource="0" file="../AudioKit/AKSynth/Organ.cpp"/>
+        <FILE id="pIZpmx" name="Organ.hpp" compile="0" resource="0" file="../AudioKit/AKSynth/Organ.hpp"/>
+        <FILE id="MboUEe" name="OrganVoice.cpp" compile="1" resource="0" file="../AudioKit/AKSynth/OrganVoice.cpp"/>
+        <FILE id="N4YbRm" name="OrganVoice.hpp" compile="0" resource="0" file="../AudioKit/AKSynth/OrganVoice.hpp"/>
+        <FILE id="BAZCEm" name="WaveStack.cpp" compile="1" resource="0" file="../AudioKit/AKSynth/WaveStack.cpp"/>
+        <FILE id="eoZ3mZ" name="WaveStack.hpp" compile="0" resource="0" file="../AudioKit/AKSynth/WaveStack.hpp"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{B74F1DB5-EDCF-D1AD-5D16-621C3AB7B7A6}" name="kissfft">
+      <FILE id="CE7IsZ" name="_kiss_fft_guts.h" compile="0" resource="0"
+            file="kissfft/_kiss_fft_guts.h"/>
+      <FILE id="gthQrg" name="kiss_fft.c" compile="1" resource="0" file="kissfft/kiss_fft.c"/>
+      <FILE id="TR1NQr" name="kiss_fft.h" compile="0" resource="0" file="kissfft/kiss_fft.h"/>
+      <FILE id="lRVGux" name="kiss_fftr.c" compile="1" resource="0" file="kissfft/kiss_fftr.c"/>
+      <FILE id="p9xFR6" name="kiss_fftr.h" compile="0" resource="0" file="kissfft/kiss_fftr.h"/>
+    </GROUP>
+    <GROUP id="{2E86CEC3-CFB9-38D9-29D3-EE5DE73CD565}" name="Common">
+      <FILE id="ZiAiW1" name="BasicKnob.cpp" compile="1" resource="0" file="../Common/BasicKnob.cpp"/>
+      <FILE id="jZCtYv" name="BasicKnob.h" compile="0" resource="0" file="../Common/BasicKnob.h"/>
+      <FILE id="k8iaH5" name="LabeledKnob.cpp" compile="1" resource="0" file="../Common/LabeledKnob.cpp"/>
+      <FILE id="V82f4M" name="LabeledKnob.h" compile="0" resource="0" file="../Common/LabeledKnob.h"/>
+      <FILE id="V70gzq" name="ParameterListeners.h" compile="0" resource="0"
+            file="../Common/ParameterListeners.h"/>
+    </GROUP>
+    <GROUP id="{3973922E-B962-5A59-E6CC-64EDD1FE30F5}" name="Plugin">
+      <FILE id="xC6bwn" name="Drawbar.cpp" compile="1" resource="0" file="Plugin/Drawbar.cpp"/>
+      <FILE id="VkM8m0" name="Drawbar.h" compile="0" resource="0" file="Plugin/Drawbar.h"/>
+      <FILE id="mq034U" name="MOrganOscEditor.cpp" compile="1" resource="0"
+            file="Plugin/MOrganOscEditor.cpp"/>
+      <FILE id="G7FjWV" name="MOrganOscEditor.h" compile="0" resource="0"
+            file="Plugin/MOrganOscEditor.h"/>
+      <FILE id="vODu4Y" name="MOrganOscParameters.cpp" compile="1" resource="0"
+            file="Plugin/MOrganOscParameters.cpp"/>
+      <FILE id="OXRKBs" name="MOrganOscParameters.h" compile="0" resource="0"
+            file="Plugin/MOrganOscParameters.h"/>
+      <FILE id="HgDisH" name="MOrganOscProcessor.cpp" compile="1" resource="0"
+            file="Plugin/MOrganOscProcessor.cpp"/>
+      <FILE id="bA0ter" name="MOrganOscProcessor.h" compile="0" resource="0"
+            file="Plugin/MOrganOscProcessor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" vstLegacyFolder="/Users/shane/SDKs/VST_SDK/VST2_SDK">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../juce"/>
+        <MODULEPATH id="juce_opengl" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video"/>
+        <MODULEPATH id="juce_opengl"/>
+        <MODULEPATH id="juce_gui_extra"/>
+        <MODULEPATH id="juce_gui_basics"/>
+        <MODULEPATH id="juce_graphics"/>
+        <MODULEPATH id="juce_events"/>
+        <MODULEPATH id="juce_data_structures"/>
+        <MODULEPATH id="juce_cryptography"/>
+        <MODULEPATH id="juce_core"/>
+        <MODULEPATH id="juce_audio_utils"/>
+        <MODULEPATH id="juce_audio_processors"/>
+        <MODULEPATH id="juce_audio_plugin_client"/>
+        <MODULEPATH id="juce_audio_formats"/>
+        <MODULEPATH id="juce_audio_devices"/>
+        <MODULEPATH id="juce_audio_basics"/>
+      </MODULEPATHS>
+    </VS2019>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+    <OSX/>
+  </LIVE_SETTINGS>
+  <JUCEOPTIONS JUCE_VST3_CAN_REPLACE_VST2="0" JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+</JUCERPROJECT>

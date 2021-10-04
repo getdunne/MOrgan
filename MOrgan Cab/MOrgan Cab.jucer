@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="IXkp6K" name="MOrgan Cab" projectType="audioplug" companyName="MOrgan"
+              pluginManufacturerCode="MOrg" headerPath="../../../AudioKit/AKCommon&#10;../../../Common&#10;../../B3Whirl&#10;../../mdaLeslie"
+              pluginCharacteristicsValue="pluginWantsMidiIn" reportAppUsage="0"
+              displaySplashScreen="0" projectLineFeed="&#10;" companyCopyright="(c)2021 Shane Dunne"
+              companyWebsite="https://github.com/getdunne/MOrgan" pluginCode="MCab"
+              jucerFormatVersion="1" version="1.0.0">
+  <MAINGROUP id="HQPykZ" name="MOrgan Cab">
+    <GROUP id="{2E86CEC3-CFB9-38D9-29D3-EE5DE73CD565}" name="Assets">
+      <FILE id="M8KNqn" name="Logo-M.png" compile="0" resource="1" file="../Assets/Logo-M.png"/>
+    </GROUP>
+    <GROUP id="{1D4BA84E-E9D7-DAD1-2425-D38C5A2B26E8}" name="AudioKit">
+      <GROUP id="{6F72E37C-03BE-8799-53B1-DC687DF656F8}" name="AKCommon">
+        <FILE id="eK2ZwF" name="SustainPedalLogic.cpp" compile="1" resource="0"
+              file="../AudioKit/AKCommon/SustainPedalLogic.cpp"/>
+        <FILE id="MlLfNR" name="SustainPedalLogic.hpp" compile="0" resource="0"
+              file="../AudioKit/AKCommon/SustainPedalLogic.hpp"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{085AFB27-7269-2947-CDB3-10C86C27488A}" name="Common">
+      <FILE id="jgcOQW" name="BasicKnob.cpp" compile="1" resource="0" file="../Common/BasicKnob.cpp"/>
+      <FILE id="MCijDJ" name="BasicKnob.h" compile="0" resource="0" file="../Common/BasicKnob.h"/>
+      <FILE id="Zf83LH" name="DecibelKnob.cpp" compile="1" resource="0" file="../Common/DecibelKnob.cpp"/>
+      <FILE id="m00IHQ" name="DecibelKnob.h" compile="0" resource="0" file="../Common/DecibelKnob.h"/>
+      <FILE id="VZqVut" name="LabeledKnob.cpp" compile="1" resource="0" file="../Common/LabeledKnob.cpp"/>
+      <FILE id="o1AOZl" name="LabeledKnob.h" compile="0" resource="0" file="../Common/LabeledKnob.h"/>
+      <FILE id="Uq6gyf" name="ParameterListeners.h" compile="0" resource="0"
+            file="../Common/ParameterListeners.h"/>
+    </GROUP>
+    <GROUP id="{BEC9FCE7-FC91-A73C-5344-B3E6DDD2BDE9}" name="B3Whirl">
+      <FILE id="dd2Npi" name="b_whirl.h" compile="0" resource="0" file="B3Whirl/b_whirl.h"/>
+      <FILE id="mOxMfV" name="eqcomp.c" compile="1" resource="0" file="B3Whirl/eqcomp.c"/>
+      <FILE id="WImBJ3" name="eqcomp.h" compile="0" resource="0" file="B3Whirl/eqcomp.h"/>
+      <FILE id="vW0XDO" name="Leslie.cpp" compile="1" resource="0" file="B3Whirl/Leslie.cpp"/>
+      <FILE id="NC7NFc" name="Leslie.hpp" compile="0" resource="0" file="B3Whirl/Leslie.hpp"/>
+      <FILE id="pLVMEU" name="whirl.c" compile="1" resource="0" file="B3Whirl/whirl.c"/>
+      <FILE id="A4Hjra" name="whirl.h" compile="0" resource="0" file="B3Whirl/whirl.h"/>
+    </GROUP>
+    <GROUP id="{20A05C3A-86C2-876D-08B4-29AB44B6140F}" name="mdaLeslie">
+      <FILE id="aLMwoL" name="mdaLeslie.cpp" compile="1" resource="0" file="mdaLeslie/mdaLeslie.cpp"/>
+      <FILE id="bkPm0O" name="mdaLeslie.h" compile="0" resource="0" file="mdaLeslie/mdaLeslie.h"/>
+    </GROUP>
+    <GROUP id="{3973922E-B962-5A59-E6CC-64EDD1FE30F5}" name="Plugin">
+      <FILE id="FIzu5y" name="MOrganCabEditor.cpp" compile="1" resource="0"
+            file="Plugin/MOrganCabEditor.cpp"/>
+      <FILE id="TgzFRn" name="MOrganCabEditor.h" compile="0" resource="0"
+            file="Plugin/MOrganCabEditor.h"/>
+      <FILE id="CBXjuI" name="MOrganCabParameters.cpp" compile="1" resource="0"
+            file="Plugin/MOrganCabParameters.cpp"/>
+      <FILE id="oFeinZ" name="MOrganCabParameters.h" compile="0" resource="0"
+            file="Plugin/MOrganCabParameters.h"/>
+      <FILE id="m14Xek" name="MOrganCabProcessor.cpp" compile="1" resource="0"
+            file="Plugin/MOrganCabProcessor.cpp"/>
+      <FILE id="GKnr3L" name="MOrganCabProcessor.h" compile="0" resource="0"
+            file="Plugin/MOrganCabProcessor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" vstLegacyFolder="/Users/shane/SDKs/VST_SDK/VST2_SDK">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../juce"/>
+        <MODULEPATH id="juce_opengl" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video"/>
+        <MODULEPATH id="juce_opengl"/>
+        <MODULEPATH id="juce_gui_extra"/>
+        <MODULEPATH id="juce_gui_basics"/>
+        <MODULEPATH id="juce_graphics"/>
+        <MODULEPATH id="juce_events"/>
+        <MODULEPATH id="juce_data_structures"/>
+        <MODULEPATH id="juce_cryptography"/>
+        <MODULEPATH id="juce_core"/>
+        <MODULEPATH id="juce_audio_utils"/>
+        <MODULEPATH id="juce_audio_processors"/>
+        <MODULEPATH id="juce_audio_plugin_client"/>
+        <MODULEPATH id="juce_audio_formats"/>
+        <MODULEPATH id="juce_audio_devices"/>
+        <MODULEPATH id="juce_audio_basics"/>
+      </MODULEPATHS>
+    </VS2019>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+    <OSX/>
+  </LIVE_SETTINGS>
+  <JUCEOPTIONS JUCE_VST3_CAN_REPLACE_VST2="0" JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+</JUCERPROJECT>
