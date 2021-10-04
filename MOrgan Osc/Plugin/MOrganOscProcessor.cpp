@@ -19,9 +19,9 @@ MOrganOscProcessor::MOrganOscProcessor()
                      .withInput  ("Input",  AudioChannelSet::stereo(), true)
                      .withOutput ("Output", AudioChannelSet::stereo(), true)
                      )
+    , enablePedalSustain(false)
     , valueTreeState(*this, nullptr, Identifier("MOrganOsc"), MOrganOscParameters::createParameterLayout())
     , parameters(valueTreeState, this)
-    , enablePedalSustain(false)
 {
 }
 
