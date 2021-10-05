@@ -11,8 +11,11 @@ class MOrganCabProcessor    : public AudioProcessor
 public:
     MOrganCabProcessor();
     ~MOrganCabProcessor();
+protected:
+    bool isBusesLayoutSupported(const BusesLayout&) const override;
 
     // How the plugin describes itself to the host
+public:
     const String getName() const override { return "MOrganCab"; }
     bool acceptsMidi() const override { return true; }
     bool producesMidi() const override { return false; }

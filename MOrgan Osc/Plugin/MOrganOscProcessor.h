@@ -9,9 +9,12 @@ class MOrganOscProcessor    : public AudioProcessor
 {
 public:
     MOrganOscProcessor();
-    ~MOrganOscProcessor();
+    virtual ~MOrganOscProcessor() = default;
+protected:
+    bool isBusesLayoutSupported(const BusesLayout&) const override;
 
     // How the plugin describes itself to the host
+public:
     const String getName() const override { return "MOrganOsc"; }
     bool acceptsMidi() const override { return true; }
     bool producesMidi() const override { return false; }

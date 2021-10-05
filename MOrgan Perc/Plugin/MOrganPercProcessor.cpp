@@ -25,6 +25,13 @@ MOrganPercProcessor::MOrganPercProcessor()
     decay.exponentialCurve(0.0f, MOrganPercParameters::decayRateDefault, 1.0f, 0.0f);
 }
 
+bool MOrganPercProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
+{
+    if (layout.inputBuses.size() > 0) return false;
+    if (layout.outputBuses.size() > 0) return false;
+    return true;
+}
+
 // Respond to parameter changes
 void MOrganPercProcessor::parameterChanged(const String& paramID, float)
 {
@@ -34,21 +41,6 @@ void MOrganPercProcessor::parameterChanged(const String& paramID, float)
         decay.exponentialCurve(0.0f, parameters.decayRate, 1.0f, 0.0f);
         sendChangeMessage();
     }
-}
-
-// Destructor
-MOrganPercProcessor::~MOrganPercProcessor()
-{
-}
-
-// Prepare to process audio (always called at least once before processBlock)
-void MOrganPercProcessor::prepareToPlay (double /*sampleRate*/, int /*maxSamplesPerBlock*/)
-{
-}
-
-// Audio processing finished; release any allocated memory
-void MOrganPercProcessor::releaseResources()
-{
 }
 
 bool MOrganPercProcessor::keyDown(int nn, float& velFactor)

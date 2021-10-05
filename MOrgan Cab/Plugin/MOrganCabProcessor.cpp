@@ -27,6 +27,15 @@ MOrganCabProcessor::MOrganCabProcessor()
     leslie2Buffers[0] = leslie2Buffers[1] = nullptr;
 }
 
+bool MOrganCabProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
+{
+    if (layout.inputBuses.size() != 1) return false;
+    if (layout.outputBuses.size() != 1) return false;
+    if (layout.inputBuses[0] != AudioChannelSet::stereo()) return false;
+    if (layout.outputBuses[0] != AudioChannelSet::stereo()) return false;
+    return true;
+}
+
 // Respond to parameter changes
 void MOrganCabProcessor::parameterChanged(const String&, float)
 {

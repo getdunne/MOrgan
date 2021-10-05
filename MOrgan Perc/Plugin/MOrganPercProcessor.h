@@ -9,9 +9,12 @@ class MOrganPercProcessor   : public AudioProcessor
 {
 public:
     MOrganPercProcessor();
-    ~MOrganPercProcessor();
+    virtual ~MOrganPercProcessor() = default;
+protected:
+    bool isBusesLayoutSupported(const BusesLayout&) const override;
 
     // How the plugin describes itself to the host
+public:
     const String getName() const override { return "MOrganPerc"; }
     bool acceptsMidi() const override { return true; }
     bool producesMidi() const override { return true; }
@@ -27,8 +30,8 @@ public:
     void changeProgramName(int, const String&) override {}
 
     // Actual audio processing
-    void prepareToPlay (double sampleRate, int maxSamplesPerBlock) override;
-    void releaseResources() override;
+    void prepareToPlay(double /*sampleRate*/, int /*maxSamplesPerBlock*/) override {}
+    void releaseResources() override {}
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
 
     // Enabling the host to save and restore state

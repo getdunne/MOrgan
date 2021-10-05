@@ -16,13 +16,20 @@ AudioProcessorEditor* MOrganOscProcessor::createEditor()
 // Constructor: start off assuming stereo input, stereo output
 MOrganOscProcessor::MOrganOscProcessor()
     : AudioProcessor(BusesProperties()
-                     .withInput  ("Input",  AudioChannelSet::stereo(), true)
                      .withOutput ("Output", AudioChannelSet::stereo(), true)
                      )
     , enablePedalSustain(false)
     , valueTreeState(*this, nullptr, Identifier("MOrganOsc"), MOrganOscParameters::createParameterLayout())
     , parameters(valueTreeState, this)
 {
+}
+
+bool MOrganOscProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
+{
+    if (layout.inputBuses.size() != 0) return false;
+    if (layout.outputBuses.size() != 1) return false;
+    if (layout.outputBuses[0] != AudioChannelSet::stereo()) return false;
+    return true;
 }
 
 // Respond to parameter changes
@@ -55,11 +62,6 @@ void MOrganOscProcessor::parameterChanged(const String& paramID, float newValue)
         synth.setAmpSustainFraction(0.01f * newValue);
     else if (paramID == MOrganOscParameters::ampReleaseID)
         synth.setAmpReleaseDurationSeconds(newValue);
-}
-
-// Destructor
-MOrganOscProcessor::~MOrganOscProcessor()
-{
 }
 
 // Prepare to process audio (always called at least once before processBlock)
