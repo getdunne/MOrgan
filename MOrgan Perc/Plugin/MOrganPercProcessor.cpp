@@ -15,7 +15,7 @@ AudioProcessorEditor* MOrganPercProcessor::createEditor()
 
 // Constructor: start off assuming stereo input, stereo output
 MOrganPercProcessor::MOrganPercProcessor()
-    : AudioProcessor()
+    : AudioProcessor(BusesProperties())
     , valueTreeState(*this, nullptr, Identifier("MOrganPerc"), MOrganPercParameters::createParameterLayout())
     , parameters(valueTreeState, this)
     , triggered(false)

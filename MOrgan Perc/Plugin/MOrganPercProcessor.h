@@ -18,6 +18,7 @@ public:
     const String getName() const override { return "MOrganPerc"; }
     bool acceptsMidi() const override { return true; }
     bool producesMidi() const override { return true; }
+    bool isMidiEffect() const override { return true; }
     double getTailLengthSeconds() const override { return 0.0; }
     bool hasEditor() const override { return true; }
     AudioProcessorEditor* createEditor() override;

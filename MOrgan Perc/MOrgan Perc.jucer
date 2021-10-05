@@ -2,8 +2,8 @@
 
 <JUCERPROJECT id="j7sXOU" name="MOrgan Perc" projectType="audioplug" projectLineFeed="&#10;"
               reportAppUsage="0" displaySplashScreen="0" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
-              version="1.0.1" companyName="MOrgan" companyCopyright="(c)2021 Shane Dunne"
-              companyWebsite="https://github.com/getdunne/MOrgan" pluginManufacturerCode="Kuhl"
+              version="1.0.3" companyName="MOrgan" companyCopyright="(c)2021 Shane Dunne"
+              companyWebsite="https://github.com/getdunne/MOrgan" pluginManufacturerCode="MOrg"
               pluginCode="MPrc" jucerFormatVersion="1" headerPath="../../../Common&#10;">
   <MAINGROUP id="lsoBrg" name="MOrgan Perc">
     <GROUP id="{762709D2-CD53-6AFF-E560-22225FF87DF5}" name="Assets">
