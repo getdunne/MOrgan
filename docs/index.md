@@ -15,10 +15,9 @@ The purposes of the *MOrgan* project are:
 
 The basic MOrgan plug-in collection comprises three plug-ins. Click on the plug-in name for more information.
 
-1. **MOrgan Osc** is an instrument plug-in, which receives MIDI input and produces audio output, based on a simple tonewheel-organ oscillator model.
-2. **MOrgan Cab** is an audio-effect plug-in, which processes incoming audio using two different *rotary speaker* models, reminiscent of the type of ["Leslie" speaker cabinet system](https://en.wikipedia.org/wiki/Leslie_speaker) often used with Hammond organs.
-3. **MOrgan Perc** is a MIDI-effect plug-in which can be routed before any instrument plug-in, allowing it to behave similarly to the characteristic "percussion" system of the classic Hammond organ models, which was unique in that it was both *polyphonic* and *mono-triggered*.
+1. **[MOrgan Osc](morgan-osc.md)** is an instrument plug-in, which receives MIDI input and produces audio output, based on a simple tonewheel-organ oscillator model.
+2. **[MOrgan Cab](morgan-cab.md)** is an audio-effect plug-in, which processes incoming audio using two different *rotary speaker* models, reminiscent of the type of ["Leslie" speaker cabinet system](https://en.wikipedia.org/wiki/Leslie_speaker) often used with Hammond organs.
+3. **[MOrgan Perc](morgan-perc.md)** is a MIDI-effect plug-in which can be routed before any instrument plug-in, allowing it to behave similarly to the characteristic "percussion" system of the classic Hammond organ models, which was unique in that it was both *polyphonic* and *mono-triggered*.
 
 Other plug-ins may be added to the collection in future.
 
-## 
