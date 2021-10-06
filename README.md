@@ -23,9 +23,9 @@ The basic MOrgan plug-in collection comprises three plug-ins as follows:
 
 ## Downloading and using the MOrgan plug-ins
 
-If you simply want to *use* the MOrgan plug-ins, click on *Releases* at right for download links. You can ignore the two sections below; these are only related to compiling the open-source code yourself.
+If you simply want to *use* the MOrgan plug-ins, click on **Releases** at right for download links. You can ignore the two sections below; these are only related to compiling the open-source code yourself.
 
-For description and usage details, refer to the docs folder.
+[Click here for description and usage details](https://getdunne.github.io/MOrgan/).
 
 ## Licensing and legal concerns
 
