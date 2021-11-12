@@ -151,11 +151,70 @@ void MOrganOscProcessor::processBlock (AudioBuffer<float>& audioBuffer, MidiBuff
     }
 }
 
+std::unique_ptr<XmlElement> MOrganOscProcessor::getStateXml()
+{
+#if 0
+    // old code: put everything into XML received from APVTS::createXml()
+    std::unique_ptr<XmlElement> xml(valueTreeState.state.createXml());
+    xml->setAttribute("midiSustainEnable", enablePedalSustain);
+    return std::move(xml);
+#else
+    // new code: create an XML tree that has non-APVTS state attributes, and APVTS XML as a child object
+    auto xml = new XmlElement("MOrganOsc");             // I could choose any name here
+    xml->setAttribute("midiSustainEnable", enablePedalSustain);
+    auto apvtsXml = valueTreeState.state.createXml();   // note this XML also has tag name "MOrganOsc"
+    // The FIRST time we do this, we might need to scrub the midiSustainEnable we added to the APVTS XML,
+    // Because it was there on the XML we passed to APVTS::fromXml() with the old code, it will still be
+    // there on the XML returned by APVTS::createXml(), but that's not what we want anymore.
+    // This is how we would remove it.
+    // apvtsXml->getChildByName("MOrganOsc")->removeAttribute("midiSustainEnable");
+    xml->addChildElement(apvtsXml.release());
+    return std::unique_ptr<XmlElement>(xml);
+#endif
+}
+
+void MOrganOscProcessor::setStateXml(XmlElement* xml)
+{
+#if 0
+    // old code: we added our midiSustainEnable attribute to the APVTS XML
+    valueTreeState.state = ValueTree::fromXml(*xml);
+    enablePedalSustain = xml->getBoolAttribute("midiSustainEnable");
+#else
+#endif
+    // new code: xml points to a larger XML structure that has our midiSustainAttribute
+    // (and any other attributes/children we feel like adding to it)
+    enablePedalSustain = xml->getBoolAttribute("midiSustainEnable");
+
+    // xml also contains the APVTS XML as a child element, which is called "MOrganOsc" because that was the
+    // name we gave it when declaring it; see line 22 above.
+    auto apvtsXml = xml->getChildByName("MOrganOsc");
+    if (apvtsXml)
+        valueTreeState.state = ValueTree::fromXml(*apvtsXml);
+    else
+        valueTreeState.state = ValueTree::fromXml(*xml);
+
+    synth.setDrawBar(0, parameters.drawbar1);
+    synth.setDrawBar(1, parameters.drawbar2);
+    synth.setDrawBar(2, parameters.drawbar3);
+    synth.setDrawBar(3, parameters.drawbar4);
+    synth.setDrawBar(4, parameters.drawbar5);
+    synth.setDrawBar(5, parameters.drawbar6);
+    synth.setDrawBar(6, parameters.drawbar7);
+    synth.setDrawBar(7, parameters.drawbar8);
+    synth.setDrawBar(8, parameters.drawbar9);
+
+    synth.setAmpAttackDurationSeconds(parameters.ampAttackSec);
+    synth.setAmpDecayDurationSeconds(parameters.ampDecaySec);
+    synth.setAmpSustainFraction(parameters.ampSustainLevel);
+    synth.setAmpReleaseDurationSeconds(parameters.ampReleaseSec);
+
+    sendChangeMessage();
+}
+
 // Called by the host when it needs to persist the current plugin state
 void MOrganOscProcessor::getStateInformation (MemoryBlock& destData)
 {
-    std::unique_ptr<XmlElement> xml(valueTreeState.state.createXml());
-    xml->setAttribute("midiSustainEnable", enablePedalSustain);
+    auto xml = getStateXml();
     copyXmlToBinary(*xml, destData);
 }
 
@@ -163,26 +222,9 @@ void MOrganOscProcessor::getStateInformation (MemoryBlock& destData)
 void MOrganOscProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     std::unique_ptr<XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
-    if (xml && xml->hasTagName(valueTreeState.state.getType()))
-    {
-        valueTreeState.state = ValueTree::fromXml(*xml);
 
-        synth.setDrawBar(0, parameters.drawbar1);
-        synth.setDrawBar(1, parameters.drawbar2);
-        synth.setDrawBar(2, parameters.drawbar3);
-        synth.setDrawBar(3, parameters.drawbar4);
-        synth.setDrawBar(4, parameters.drawbar5);
-        synth.setDrawBar(5, parameters.drawbar6);
-        synth.setDrawBar(6, parameters.drawbar7);
-        synth.setDrawBar(7, parameters.drawbar8);
-        synth.setDrawBar(8, parameters.drawbar9);
+    // While migrating from old code to new code, it's helpful to print the actual XML to debug output.
+    DBG(xml->toString());
 
-        synth.setAmpAttackDurationSeconds(parameters.ampAttackSec);
-        synth.setAmpDecayDurationSeconds(parameters.ampDecaySec);
-        synth.setAmpSustainFraction(parameters.ampSustainLevel);
-        synth.setAmpReleaseDurationSeconds(parameters.ampReleaseSec);
-
-        enablePedalSustain = xml->getBoolAttribute("midiSustainEnable");
-        sendChangeMessage();
-    }
+    if (xml && xml->hasTagName(valueTreeState.state.getType())) setStateXml(xml.get());
 }

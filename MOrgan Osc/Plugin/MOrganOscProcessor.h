@@ -53,5 +53,8 @@ public:
     void parameterChanged(const String&, float) override;
 
 private:
+    std::unique_ptr<XmlElement> getStateXml();
+    void setStateXml(XmlElement*);
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MOrganOscProcessor)
 };
