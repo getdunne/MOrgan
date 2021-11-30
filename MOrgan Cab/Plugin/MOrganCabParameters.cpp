@@ -1,6 +1,14 @@
 #include "MOrganCabParameters.h"
 
 // Direct Mix
+const String MOrganCabParameters::speedID = "speed";
+const String MOrganCabParameters::speedName = TRANS("Leslie Speed");
+const String MOrganCabParameters::speedLabel = "";
+const float MOrganCabParameters::speedMin = 0.0f;
+const float MOrganCabParameters::speedMax = 1.0f;
+const float MOrganCabParameters::speedDefault = 0.0f;
+const float MOrganCabParameters::speedStep = 0.1f;
+// Direct Mix
 const String MOrganCabParameters::directID = "direct";
 const String MOrganCabParameters::directName = TRANS("Direct Mix");
 const String MOrganCabParameters::directLabel = "dB";
@@ -30,6 +38,13 @@ AudioProcessorValueTreeState::ParameterLayout MOrganCabParameters::createParamet
     std::vector<std::unique_ptr<RangedAudioParameter>> params;
 
     params.push_back(std::make_unique<AudioParameterFloat>(
+        speedID, speedName,
+        NormalisableRange<float>(speedMin, speedMax, speedStep), speedDefault,
+        speedLabel,
+        AudioProcessorParameter::genericParameter,
+        [](float value, int maxLength) { return String(value).substring(0, maxLength); },
+        [](const String& text) { return text.getFloatValue(); }));
+    params.push_back(std::make_unique<AudioParameterFloat>(
         directID, directName,
         NormalisableRange<float>(directMin, directMax, directStep), directDefault,
         directLabel,
@@ -55,19 +70,23 @@ AudioProcessorValueTreeState::ParameterLayout MOrganCabParameters::createParamet
 }
 
 MOrganCabParameters::MOrganCabParameters(AudioProcessorValueTreeState& vts, AudioProcessorValueTreeState::Listener* processor)
-    : direct(Decibels::decibelsToGain(directDefault, directMin))
+    : speed(speedDefault)
+    , direct(Decibels::decibelsToGain(directDefault, directMin))
     , leslie1(Decibels::decibelsToGain(leslie1Default, leslie1Min))
     , leslie2(Decibels::decibelsToGain(leslie2Default, leslie2Min))
     , valueTreeState(vts)
     , processorAsListener(processor)
+    , speedListener(speed)
     , directListener(direct, directMin)
     , leslie1Listener(leslie1, leslie1Min)
     , leslie2Listener(leslie2, leslie2Min)
 {
+    valueTreeState.addParameterListener(speedID, processorAsListener);
     valueTreeState.addParameterListener(directID, processorAsListener);
     valueTreeState.addParameterListener(leslie1ID, processorAsListener);
     valueTreeState.addParameterListener(leslie2ID, processorAsListener);
 
+    valueTreeState.addParameterListener(speedID, &speedListener);
     valueTreeState.addParameterListener(directID, &directListener);
     valueTreeState.addParameterListener(leslie1ID, &leslie1Listener);
     valueTreeState.addParameterListener(leslie2ID, &leslie2Listener);
@@ -77,10 +96,12 @@ MOrganCabParameters::~MOrganCabParameters()
 {
     detachControls();
     
+    valueTreeState.removeParameterListener(speedID, processorAsListener);
     valueTreeState.removeParameterListener(directID, processorAsListener);
     valueTreeState.removeParameterListener(leslie1ID, processorAsListener);
     valueTreeState.removeParameterListener(leslie2ID, processorAsListener);
 
+    valueTreeState.removeParameterListener(speedID, &speedListener);
     valueTreeState.removeParameterListener(directID, &directListener);
     valueTreeState.removeParameterListener(leslie1ID, &leslie1Listener);
     valueTreeState.removeParameterListener(leslie2ID, &leslie2Listener);
@@ -88,18 +109,21 @@ MOrganCabParameters::~MOrganCabParameters()
 
 void MOrganCabParameters::detachControls()
 {
+    speedAttachment.reset(nullptr);
     directAttachment.reset(nullptr);
     leslie1Attachment.reset(nullptr);
     leslie2Attachment.reset(nullptr);
 }
 
 void MOrganCabParameters::attachControls(
+    Button& speedButton,
     Slider& directKnob,
     Slider& leslie1Knob,
     Slider& leslie2Knob )
 {
-    using CbAt = AudioProcessorValueTreeState::ComboBoxAttachment;
+    using BnAt = AudioProcessorValueTreeState::ButtonAttachment;
     using SlAt = AudioProcessorValueTreeState::SliderAttachment;
+    speedAttachment.reset(new BnAt(valueTreeState, speedID, speedButton));
     directAttachment.reset(new SlAt(valueTreeState, directID, directKnob));
     leslie1Attachment.reset(new SlAt(valueTreeState, leslie1ID, leslie1Knob));
     leslie2Attachment.reset(new SlAt(valueTreeState, leslie2ID, leslie2Knob));

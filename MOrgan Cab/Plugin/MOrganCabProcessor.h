@@ -48,9 +48,8 @@ public:
 
     Leslie leslie1;
     mdaLeslie leslie2;
-
-    bool pedalLeslieMode;   // true = sustain controls leslie speeds, MW ignored
-                            // false = sustain sustains, MW controls leslie speeds
+    bool fast;
+    int pedalLeslieMode;    // 0 = automation only, 1 = sustain, 2 = modwheel
 
     // Respond to parameter changes
     void parameterChanged(const String&, float) override;

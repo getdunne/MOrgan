@@ -21,7 +21,8 @@ MOrganCabProcessor::MOrganCabProcessor()
     )
     , valueTreeState(*this, nullptr, Identifier("MOrganCab"), MOrganCabParameters::createParameterLayout())
     , parameters(valueTreeState, this)
-    , pedalLeslieMode(false)
+    , fast(false)
+    , pedalLeslieMode(0)
 {
     leslie1Buffers[0] = leslie1Buffers[1] = nullptr;
     leslie2Buffers[0] = leslie2Buffers[1] = nullptr;
@@ -37,8 +38,26 @@ bool MOrganCabProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
 }
 
 // Respond to parameter changes
-void MOrganCabProcessor::parameterChanged(const String&, float)
+void MOrganCabProcessor::parameterChanged(const String& whatChanged, float newValue)
 {
+    DBG(whatChanged + " <== " + String(newValue));
+    if (whatChanged == MOrganCabParameters::speedID)
+    {
+        bool newFast = parameters.speed > 0.5f;
+        if (newFast == fast) return;
+        fast = newFast;
+        if (fast)
+        {
+            leslie1.setSpeed(8.0f);
+            leslie2.fast();
+        }
+        else
+        {
+            leslie1.setSpeed(4.0f);
+            leslie2.slow();
+        }
+        sendChangeMessage();
+    }
 }
 
 // Destructor
@@ -83,16 +102,18 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
         auto msg = mmd.getMessage();
         if (msg.isSustainPedalOn())
         {
-            if (pedalLeslieMode)
+            if (pedalLeslieMode == 1)
             {
+                valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.8f);
                 leslie1.setSpeed(8.0f);
                 leslie2.fast();
             }
         }
         else if (msg.isSustainPedalOff())
         {
-            if (pedalLeslieMode)
+            if (pedalLeslieMode == 1)
             {
+                valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.4f);
                 leslie1.setSpeed(4.0f);
                 leslie2.slow();
             }
@@ -100,8 +121,9 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
         else if (msg.isControllerOfType(1))
         {
             float cv = msg.getControllerValue() / 127.0f;
-            if (!pedalLeslieMode)
+            if (pedalLeslieMode == 2)
             {
+                valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(cv > 0.5f ? 0.8f : 0.4f);
                 leslie1.setSpeed(8.0f * cv);
                 leslie2.setSpeed(cv);
             }
@@ -109,7 +131,6 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
     }
     int numSamples = audioBuffer.getNumSamples();
     midiBuffer.clear(0, numSamples);
-
 
     // render Leslie effects to their buffers
     const float* inbufs[2] = { audioBuffer.getWritePointer(0), audioBuffer.getWritePointer(1) };

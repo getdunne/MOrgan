@@ -22,6 +22,7 @@ private:
     SharedResourcePointer<BasicLookAndFeel> lookAndFeel;
     MOrganCabProcessor& processor;
 
+    TextButton speedButton;
     DecibelKnob directKnob; LabeledKnob labeledDirectKnob;
     DecibelKnob leslie1Knob; LabeledKnob labeledLeslie1Knob;
     DecibelKnob leslie2Knob; LabeledKnob labeledLeslie2Knob;

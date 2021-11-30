@@ -14,6 +14,11 @@ MOrganCabEditor::MOrganCabEditor (MOrganCabProcessor& p)
 {
     setLookAndFeel(lookAndFeel);
 
+    speedButton.setClickingTogglesState(true);
+    speedButton.setToggleState(processor.fast, dontSendNotification);
+    speedButton.setButtonText(processor.fast ? "Spin DOWN" : "Spin UP");
+    addAndMakeVisible(speedButton);
+
     directKnob.setDoubleClickReturnValue(true, double(MOrganCabParameters::directDefault), ModifierKeys::noModifiers);
     directKnob.setFillColour(Colour(108, 20, 21).darker());
     addAndMakeVisible(labeledDirectKnob);
@@ -24,20 +29,18 @@ MOrganCabEditor::MOrganCabEditor (MOrganCabProcessor& p)
     leslie2Knob.setFillColour(Colour(108, 20, 21).darker());
     addAndMakeVisible(labeledLeslie2Knob);
 
-    processor.parameters.attachControls(
-        directKnob,
-        leslie1Knob,
-        leslie2Knob );
+    processor.parameters.attachControls(speedButton, directKnob, leslie1Knob, leslie2Knob );
 
-    leslieModeLabel.setText("Leslie Speed", NotificationType::dontSendNotification);
+    leslieModeLabel.setText("MIDI Control", NotificationType::dontSendNotification);
     leslieModeLabel.attachToComponent(&leslieModeCombo, true);
 
-    leslieModeCombo.addItem("Mod Wheel", 1);
+    leslieModeCombo.addItem("None", 1);
     leslieModeCombo.addItem("Sustain Pedal", 2);
-    leslieModeCombo.setSelectedItemIndex(processor.pedalLeslieMode ? 1 : 0);
+    leslieModeCombo.addItem("Mod Wheel", 3);
+    leslieModeCombo.setSelectedItemIndex(processor.pedalLeslieMode);
     leslieModeCombo.onChange = [this]()
     {
-        processor.pedalLeslieMode = leslieModeCombo.getSelectedItemIndex() > 0;
+        processor.pedalLeslieMode = leslieModeCombo.getSelectedItemIndex();
     };
     addAndMakeVisible(leslieModeCombo);
 
@@ -65,7 +68,8 @@ void MOrganCabEditor::resized()
     auto area = getLocalBounds().reduced(20);
     area.removeFromRight(logoImage.getWidth() + 20);
 
-    auto col = area.removeFromLeft(220).reduced(0, 12);
+    auto col = area.removeFromLeft(220).reduced(0, 4);
+    speedButton.setBounds(col.removeFromTop(24));
     col.removeFromTop(10);
     auto row = col.removeFromTop(24);
     row.removeFromLeft(80);
@@ -92,5 +96,6 @@ void MOrganCabEditor::paint (Graphics& g)
 
 void MOrganCabEditor::changeListenerCallback(ChangeBroadcaster*)
 {
-    leslieModeCombo.setSelectedItemIndex(processor.pedalLeslieMode ? 1 : 0, dontSendNotification);
+    leslieModeCombo.setSelectedItemIndex(processor.pedalLeslieMode, dontSendNotification);
+    speedButton.setButtonText(processor.fast ? "Spin DOWN" : "Spin UP");
 }
