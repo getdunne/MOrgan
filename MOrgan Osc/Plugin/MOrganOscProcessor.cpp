@@ -117,22 +117,6 @@ void MOrganOscProcessor::processBlock (AudioBuffer<float>& audioBuffer, MidiBuff
                 synth.setVibratoDepth(0.5f * cv);
             }
         }
-        else if (msg.isController())
-        {
-            int cn = msg.getControllerNumber();
-            if (cn >= 16 && cn < 24)
-            {
-                float cv = msg.getControllerValue() / 127.0f;
-                synth.setDrawBar(cn - 16, cv);
-                sendChangeMessage();
-            }
-            else if (cn == 24)
-            {
-                float cv = msg.getControllerValue() / 127.0f;
-                synth.setMasterVolume(cv);
-                sendChangeMessage();
-            }
-        }
     }
     int numSamples = audioBuffer.getNumSamples();
     midiBuffer.clear(0, numSamples);
