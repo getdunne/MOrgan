@@ -23,7 +23,7 @@ private:
     MOrganOscProcessor& processor;
 
     Drawbar drawBar1, drawBar2, drawBar3, drawBar4, drawBar5, drawBar6, drawBar7, drawBar8, drawBar9;
-    ToggleButton sustainToggle;
+    ToggleButton sustainToggle, vibratoToggle;
     BasicKnob ampAttackKnob; LabeledKnob labeledAmpAttackKnob;
     BasicKnob ampDecayKnob; LabeledKnob labeledAmpDecayKnob;
     BasicKnob ampSustainKnob; LabeledKnob labeledAmpSustainKnob;

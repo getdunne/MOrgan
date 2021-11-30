@@ -44,6 +44,14 @@ MOrganOscEditor::MOrganOscEditor (MOrganOscProcessor& p)
     };
     addAndMakeVisible(sustainToggle);
 
+    vibratoToggle.setButtonText("MW Vibrato");
+    vibratoToggle.setToggleState(processor.enableModwheelVibrato, dontSendNotification);
+    vibratoToggle.onStateChange = [this]()
+    {
+        processor.enableModwheelVibrato = vibratoToggle.getToggleState();
+    };
+    addAndMakeVisible(vibratoToggle);
+
     ampAttackKnob.setFillColour(Colour(108, 20, 21).darker());
     ampAttackKnob.setDoubleClickReturnValue(true, double(MOrganOscParameters::ampAttackDefault), ModifierKeys::noModifiers);
     addAndMakeVisible(labeledAmpAttackKnob);
@@ -95,9 +103,9 @@ void MOrganOscEditor::resized()
     area.removeFromTop(40);
 
     auto row = area.removeFromBottom(80);
-    auto col = row.removeFromLeft(110).reduced(0, 12);
-    col.removeFromTop(6);
+    auto col = row.removeFromLeft(110).reduced(0, 4);
     sustainToggle.setBounds(col.removeFromTop(24));
+    vibratoToggle.setBounds(col.removeFromTop(24));
     infoButton.setBounds(col.removeFromBottom(24));
 
     row.removeFromLeft(20);
@@ -162,4 +170,5 @@ void MOrganOscEditor::paint (Graphics& g)
 void MOrganOscEditor::changeListenerCallback(ChangeBroadcaster*)
 {
     sustainToggle.setToggleState(processor.enablePedalSustain, dontSendNotification);
+    vibratoToggle.setToggleState(processor.enableModwheelVibrato, dontSendNotification);
 }

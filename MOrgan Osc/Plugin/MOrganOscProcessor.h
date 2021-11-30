@@ -40,7 +40,7 @@ public:
 
     // GUI accessible members
     Organ synth;
-    bool enablePedalSustain;
+    bool enablePedalSustain, enableModwheelVibrato;
 
 public:
     // Plugin's AudioProcessorValueTreeState

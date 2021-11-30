@@ -19,6 +19,7 @@ MOrganOscProcessor::MOrganOscProcessor()
                      .withOutput ("Output", AudioChannelSet::stereo(), true)
                      )
     , enablePedalSustain(false)
+    , enableModwheelVibrato(false)
     , valueTreeState(*this, nullptr, Identifier("MOrganOsc"), MOrganOscParameters::createParameterLayout())
     , parameters(valueTreeState, this)
 {
@@ -110,8 +111,11 @@ void MOrganOscProcessor::processBlock (AudioBuffer<float>& audioBuffer, MidiBuff
         }
         else if (msg.isControllerOfType(1))
         {
-            float cv = msg.getControllerValue() / 127.0f;
-            synth.setVibratoDepth(0.5f * cv);
+            if (enableModwheelVibrato)
+            {
+                float cv = msg.getControllerValue() / 127.0f;
+                synth.setVibratoDepth(0.5f * cv);
+            }
         }
         else if (msg.isController())
         {
@@ -162,6 +166,7 @@ std::unique_ptr<XmlElement> MOrganOscProcessor::getStateXml()
     // new code: create an XML tree that has non-APVTS state attributes, and APVTS XML as a child object
     auto xml = new XmlElement("MOrganOsc");             // I could choose any name here
     xml->setAttribute("midiSustainEnable", enablePedalSustain);
+    xml->setAttribute("modwheelVibratoEnable", enableModwheelVibrato);
     auto apvtsXml = valueTreeState.state.createXml();   // note this XML also has tag name "MOrganOsc"
     // The FIRST time we do this, we might need to scrub the midiSustainEnable we added to the APVTS XML,
     // Because it was there on the XML we passed to APVTS::fromXml() with the old code, it will still be
@@ -184,6 +189,7 @@ void MOrganOscProcessor::setStateXml(XmlElement* xml)
     // new code: xml points to a larger XML structure that has our midiSustainAttribute
     // (and any other attributes/children we feel like adding to it)
     enablePedalSustain = xml->getBoolAttribute("midiSustainEnable");
+    enableModwheelVibrato = xml->getBoolAttribute("modwheelVibratoEnable");
 
     // xml also contains the APVTS XML as a child element, which is called "MOrganOsc" because that was the
     // name we gave it when declaring it; see line 22 above.
