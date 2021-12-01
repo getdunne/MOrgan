@@ -34,6 +34,8 @@ public:
     static const float ampSustainMin, ampSustainMax, ampSustainDefault, ampSustainStep;
     static const String ampReleaseID, ampReleaseName, ampReleaseLabel;
     static const float ampReleaseMin, ampReleaseMax, ampReleaseDefault, ampReleaseStep;
+    static const String masterVolumeID, masterVolumeName, masterVolumeLabel;
+    static const float masterVolumeMin, masterVolumeMax, masterVolumeDefault, masterVolumeStep;
     static AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
 public:
@@ -55,7 +57,8 @@ public:
         Slider& ampAttackKnob,
         Slider& ampDecayKnob,
         Slider& ampSustainKnob,
-        Slider& ampReleaseKnob );
+        Slider& ampReleaseKnob,
+        Slider& masterVolumeKnob );
 
     // working parameter values
     float drawbar1;
@@ -71,6 +74,7 @@ public:
     float ampDecaySec;
     float ampSustainLevel;
     float ampReleaseSec;
+    float masterVolFraction;
 
 private:
     // Reference to AudioProcessorValueTreeState object that owns the parameter objects
@@ -93,6 +97,7 @@ private:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> ampDecayAttachment;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> ampSustainAttachment;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> ampReleaseAttachment;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> masterVolumeAttachment;
 
     // Listener objects link parameters to working variables
     FloatListener drawbar1Listener;
@@ -108,4 +113,5 @@ private:
     FloatListener ampDecayListener;
     FloatListener ampSustainListener;
     FloatListener ampReleaseListener;
+    FloatDecibelListener masterVolumeListener;
 };

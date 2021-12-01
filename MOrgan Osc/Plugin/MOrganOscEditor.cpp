@@ -21,6 +21,8 @@ MOrganOscEditor::MOrganOscEditor (MOrganOscProcessor& p)
     , labeledAmpSustainKnob(MOrganOscParameters::ampSustainName, ampSustainKnob)
     , ampReleaseKnob(MOrganOscParameters::ampReleaseMin, MOrganOscParameters::ampReleaseMax, MOrganOscParameters::ampReleaseLabel)
     , labeledAmpReleaseKnob(MOrganOscParameters::ampReleaseName, ampReleaseKnob)
+    , masterVolumeKnob(MOrganOscParameters::masterVolumeMin, MOrganOscParameters::masterVolumeMax, MOrganOscParameters::masterVolumeLabel)
+    , labeledMasterVolumeKnob(MOrganOscParameters::masterVolumeName, masterVolumeKnob)
     , infoButton("More info...", URL("https://github.com/getdunne/MOrgan"))
 {
     setLookAndFeel(lookAndFeel);
@@ -65,6 +67,10 @@ MOrganOscEditor::MOrganOscEditor (MOrganOscProcessor& p)
     ampReleaseKnob.setDoubleClickReturnValue(true, double(MOrganOscParameters::ampReleaseDefault), ModifierKeys::noModifiers);
     addAndMakeVisible(labeledAmpReleaseKnob);
 
+    masterVolumeKnob.setFillColour(Colour(108, 20, 21).darker(0.5f));
+    masterVolumeKnob.setDoubleClickReturnValue(true, double(MOrganOscParameters::masterVolumeDefault), ModifierKeys::noModifiers);
+    addAndMakeVisible(labeledMasterVolumeKnob);
+
     processor.parameters.attachControls(
         drawBar1,
         drawBar2,
@@ -78,7 +84,8 @@ MOrganOscEditor::MOrganOscEditor (MOrganOscProcessor& p)
         ampAttackKnob,
         ampDecayKnob,
         ampSustainKnob,
-        ampReleaseKnob );
+        ampReleaseKnob,
+        masterVolumeKnob );
 
     logoImage = ImageCache::getFromMemory(BinaryData::LogoM_png, BinaryData::LogoM_pngSize);
     float whRatio = float(logoImage.getWidth()) / logoImage.getHeight();
@@ -110,14 +117,12 @@ void MOrganOscEditor::resized()
 
     row.removeFromLeft(20);
     row.removeFromRight(logoImage.getWidth() + 20);
-    auto knobWidth = (row.getWidth() - 30) / 4;
+    auto knobWidth = (row.getWidth() - 10) / 5;
     labeledAmpAttackKnob.setBounds(row.removeFromLeft(knobWidth));
-    row.removeFromLeft(10);
     labeledAmpDecayKnob.setBounds(row.removeFromLeft(knobWidth));
-    row.removeFromLeft(10);
     labeledAmpSustainKnob.setBounds(row.removeFromLeft(knobWidth));
-    row.removeFromLeft(10);
-    labeledAmpReleaseKnob.setBounds(row);
+    labeledAmpReleaseKnob.setBounds(row.removeFromLeft(knobWidth));
+    labeledMasterVolumeKnob.setBounds(row.removeFromRight(knobWidth));
 
     area.removeFromBottom(20);
 
@@ -148,7 +153,6 @@ void MOrganOscEditor::resized()
     area.removeFromLeft(4);
     column = area.removeFromLeft(drawBarWidth);
     drawBar9.setBounds(column);
-
 }
 
 void MOrganOscEditor::paint (Graphics& g)

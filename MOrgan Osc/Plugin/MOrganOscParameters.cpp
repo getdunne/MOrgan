@@ -104,6 +104,14 @@ const float MOrganOscParameters::ampReleaseMin = 0.0f;
 const float MOrganOscParameters::ampReleaseMax = 1.0f;
 const float MOrganOscParameters::ampReleaseDefault = 0.05f;
 const float MOrganOscParameters::ampReleaseStep = 0.001f;
+// Master Volume
+const String MOrganOscParameters::masterVolumeID = "masterVolume";
+const String MOrganOscParameters::masterVolumeName = TRANS("Volume");
+const String MOrganOscParameters::masterVolumeLabel = "dB";
+const float MOrganOscParameters::masterVolumeMin = -12.0f;
+const float MOrganOscParameters::masterVolumeMax = 12.0f;
+const float MOrganOscParameters::masterVolumeDefault = 0.0f;
+const float MOrganOscParameters::masterVolumeStep = 0.1f;
 
 AudioProcessorValueTreeState::ParameterLayout MOrganOscParameters::createParameterLayout()
 {
@@ -200,6 +208,13 @@ AudioProcessorValueTreeState::ParameterLayout MOrganOscParameters::createParamet
         AudioProcessorParameter::genericParameter,
         [](float value, int maxLength) { return String(value).substring(0, maxLength); },
         [](const String& text) { return text.getFloatValue(); }));
+    params.push_back(std::make_unique<AudioParameterFloat>(
+        masterVolumeID, masterVolumeName,
+        NormalisableRange<float>(masterVolumeMin, masterVolumeMax, masterVolumeStep), masterVolumeDefault,
+        masterVolumeLabel,
+        AudioProcessorParameter::genericParameter,
+        [](float value, int maxLength) { return String(value).substring(0, maxLength); },
+        [](const String& text) { return text.getFloatValue(); }));
 
     return { params.begin(), params.end() };
 }
@@ -219,6 +234,7 @@ MOrganOscParameters::MOrganOscParameters(AudioProcessorValueTreeState& vts,
     , ampDecaySec(ampDecayDefault)
     , ampSustainLevel(0.01f * ampSustainDefault)
     , ampReleaseSec(ampReleaseDefault)
+    , masterVolFraction(1.0f)
     , valueTreeState(vts)
     , processorAsListener(processor)
     , drawbar1Listener(drawbar1, 0.01f)
@@ -234,6 +250,7 @@ MOrganOscParameters::MOrganOscParameters(AudioProcessorValueTreeState& vts,
     , ampDecayListener(ampDecaySec)
     , ampSustainListener(ampSustainLevel, 0.01f)
     , ampReleaseListener(ampReleaseSec)
+    , masterVolumeListener(masterVolFraction)
 {
     valueTreeState.addParameterListener(drawbar1ID, processorAsListener);
     valueTreeState.addParameterListener(drawbar2ID, processorAsListener);
@@ -248,6 +265,7 @@ MOrganOscParameters::MOrganOscParameters(AudioProcessorValueTreeState& vts,
     valueTreeState.addParameterListener(ampDecayID, processorAsListener);
     valueTreeState.addParameterListener(ampSustainID, processorAsListener);
     valueTreeState.addParameterListener(ampReleaseID, processorAsListener);
+    valueTreeState.addParameterListener(masterVolumeID, processorAsListener);
 
     valueTreeState.addParameterListener(drawbar1ID, &drawbar1Listener);
     valueTreeState.addParameterListener(drawbar2ID, &drawbar2Listener);
@@ -262,6 +280,7 @@ MOrganOscParameters::MOrganOscParameters(AudioProcessorValueTreeState& vts,
     valueTreeState.addParameterListener(ampDecayID, &ampDecayListener);
     valueTreeState.addParameterListener(ampSustainID, &ampSustainListener);
     valueTreeState.addParameterListener(ampReleaseID, &ampReleaseListener);
+    valueTreeState.addParameterListener(masterVolumeID, &masterVolumeListener);
 }
 
 MOrganOscParameters::~MOrganOscParameters()
@@ -281,6 +300,7 @@ MOrganOscParameters::~MOrganOscParameters()
     valueTreeState.removeParameterListener(ampDecayID, processorAsListener);
     valueTreeState.removeParameterListener(ampSustainID, processorAsListener);
     valueTreeState.removeParameterListener(ampReleaseID, processorAsListener);
+    valueTreeState.removeParameterListener(masterVolumeID, processorAsListener);
 
     valueTreeState.removeParameterListener(drawbar1ID, &drawbar1Listener);
     valueTreeState.removeParameterListener(drawbar2ID, &drawbar2Listener);
@@ -295,6 +315,7 @@ MOrganOscParameters::~MOrganOscParameters()
     valueTreeState.removeParameterListener(ampDecayID, &ampDecayListener);
     valueTreeState.removeParameterListener(ampSustainID, &ampSustainListener);
     valueTreeState.removeParameterListener(ampReleaseID, &ampReleaseListener);
+    valueTreeState.removeParameterListener(masterVolumeID, &masterVolumeListener);
 }
 
 void MOrganOscParameters::detachControls()
@@ -312,6 +333,7 @@ void MOrganOscParameters::detachControls()
     ampDecayAttachment.reset(nullptr);
     ampSustainAttachment.reset(nullptr);
     ampReleaseAttachment.reset(nullptr);
+    masterVolumeAttachment.reset(nullptr);
 }
 
 void MOrganOscParameters::attachControls(
@@ -327,7 +349,8 @@ void MOrganOscParameters::attachControls(
     Slider& ampAttackKnob,
     Slider& ampDecayKnob,
     Slider& ampSustainKnob,
-    Slider& ampReleaseKnob )
+    Slider& ampReleaseKnob,
+    Slider& masterVolumeKnob )
 {
     using CbAt = AudioProcessorValueTreeState::ComboBoxAttachment;
     using SlAt = AudioProcessorValueTreeState::SliderAttachment;
@@ -344,4 +367,5 @@ void MOrganOscParameters::attachControls(
     ampDecayAttachment.reset(new SlAt(valueTreeState, ampDecayID, ampDecayKnob));
     ampSustainAttachment.reset(new SlAt(valueTreeState, ampSustainID, ampSustainKnob));
     ampReleaseAttachment.reset(new SlAt(valueTreeState, ampReleaseID, ampReleaseKnob));
+    masterVolumeAttachment.reset(new SlAt(valueTreeState, masterVolumeID, masterVolumeKnob));
 }

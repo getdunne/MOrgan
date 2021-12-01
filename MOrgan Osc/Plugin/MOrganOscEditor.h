@@ -28,6 +28,7 @@ private:
     BasicKnob ampDecayKnob; LabeledKnob labeledAmpDecayKnob;
     BasicKnob ampSustainKnob; LabeledKnob labeledAmpSustainKnob;
     BasicKnob ampReleaseKnob; LabeledKnob labeledAmpReleaseKnob;
+    BasicKnob masterVolumeKnob; LabeledKnob labeledMasterVolumeKnob;
 
     Image logoImage;
     HyperlinkButton infoButton;

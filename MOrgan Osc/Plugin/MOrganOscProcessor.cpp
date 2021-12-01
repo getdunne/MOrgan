@@ -137,6 +137,8 @@ void MOrganOscProcessor::processBlock (AudioBuffer<float>& audioBuffer, MidiBuff
         bufs[0] += chunkSize;
         bufs[1] += chunkSize;
     }
+
+    audioBuffer.applyGain(parameters.masterVolFraction);
 }
 
 std::unique_ptr<XmlElement> MOrganOscProcessor::getStateXml()
