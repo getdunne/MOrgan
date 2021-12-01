@@ -42,7 +42,7 @@ AudioProcessorValueTreeState::ParameterLayout MOrganCabParameters::createParamet
         NormalisableRange<float>(speedMin, speedMax, speedStep), speedDefault,
         speedLabel,
         AudioProcessorParameter::genericParameter,
-        [](float value, int maxLength) { return String(value).substring(0, maxLength); },
+        [](float value, int maxLength) { return String(value > 0.5f ? "fast" : "slow").substring(0, maxLength); },
         [](const String& text) { return text.getFloatValue(); }));
     params.push_back(std::make_unique<AudioParameterFloat>(
         directID, directName,
