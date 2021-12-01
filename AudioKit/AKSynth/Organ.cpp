@@ -83,7 +83,7 @@ int Organ::init(double sampleRate)
     FunctionTable waveform;
     int length = 1 << AudioKitCore::WaveStack::maxBits;
     waveform.init(length);
-    waveform.hammond(0.5f);
+    waveform.hammond(0.177f);
     data->waveform.initStack(waveform.pWaveTable);
     
     data->ampEGParameters.updateSampleRate((float)(sampleRate/AKSYNTH_CHUNKSIZE));
@@ -194,8 +194,6 @@ void Organ::setDrawBar(int index, float value)
 float Organ::getDrawBar(int index)
 {
     if (index < 0 || index > 8) return 0.0f;
-    //index = AudioKitCore::DrawbarsOscillator::drawBarMap[index];
-    //return data->voiceParameters.organ.drawbars[index];
     return data->nominalDrawbarValues[index];
 }
 
