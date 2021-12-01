@@ -31,18 +31,19 @@ MOrganCabEditor::MOrganCabEditor (MOrganCabProcessor& p)
 
     processor.parameters.attachControls(speedButton, directKnob, leslie1Knob, leslie2Knob );
 
-    leslieModeLabel.setText("MIDI Control", NotificationType::dontSendNotification);
-    leslieModeLabel.attachToComponent(&leslieModeCombo, true);
+    midiModeLabel.setText("MIDI Control", NotificationType::dontSendNotification);
+    midiModeLabel.attachToComponent(&midiModeCombo, true);
 
-    leslieModeCombo.addItem("None", 1);
-    leslieModeCombo.addItem("Sustain Pedal", 2);
-    leslieModeCombo.addItem("Mod Wheel", 3);
-    leslieModeCombo.setSelectedItemIndex(processor.pedalLeslieMode);
-    leslieModeCombo.onChange = [this]()
+    midiModeCombo.addItem("None", 1);
+    midiModeCombo.addItem("Sustain Pedal", 2);
+    midiModeCombo.addItem("Mod Wheel", 3);
+    midiModeCombo.addItem("Sustain+MW", 4);
+    midiModeCombo.setSelectedItemIndex(processor.midiControlMode);
+    midiModeCombo.onChange = [this]()
     {
-        processor.pedalLeslieMode = leslieModeCombo.getSelectedItemIndex();
+        processor.midiControlMode = midiModeCombo.getSelectedItemIndex();
     };
-    addAndMakeVisible(leslieModeCombo);
+    addAndMakeVisible(midiModeCombo);
 
     logoImage = ImageCache::getFromMemory(BinaryData::LogoM_png, BinaryData::LogoM_pngSize);
     float whRatio = float(logoImage.getWidth()) / logoImage.getHeight();
@@ -73,7 +74,7 @@ void MOrganCabEditor::resized()
     col.removeFromTop(10);
     auto row = col.removeFromTop(24);
     row.removeFromLeft(80);
-    leslieModeCombo.setBounds(row);
+    midiModeCombo.setBounds(row);
     row = col.removeFromBottom(24);
     row.removeFromRight(20);
     infoButton.setBounds(row);
@@ -96,6 +97,6 @@ void MOrganCabEditor::paint (Graphics& g)
 
 void MOrganCabEditor::changeListenerCallback(ChangeBroadcaster*)
 {
-    leslieModeCombo.setSelectedItemIndex(processor.pedalLeslieMode, dontSendNotification);
+    midiModeCombo.setSelectedItemIndex(processor.midiControlMode, dontSendNotification);
     speedButton.setButtonText(processor.fast ? "Spin DOWN" : "Spin UP");
 }

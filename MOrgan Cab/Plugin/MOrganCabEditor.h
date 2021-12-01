@@ -27,8 +27,8 @@ private:
     DecibelKnob leslie1Knob; LabeledKnob labeledLeslie1Knob;
     DecibelKnob leslie2Knob; LabeledKnob labeledLeslie2Knob;
 
-    ComboBox leslieModeCombo;
-    Label leslieModeLabel;
+    ComboBox midiModeCombo;
+    Label midiModeLabel;
 
     Image logoImage;
     HyperlinkButton infoButton;

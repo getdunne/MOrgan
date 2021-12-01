@@ -22,7 +22,7 @@ MOrganCabProcessor::MOrganCabProcessor()
     , valueTreeState(*this, nullptr, Identifier("MOrganCab"), MOrganCabParameters::createParameterLayout())
     , parameters(valueTreeState, this)
     , fast(false)
-    , pedalLeslieMode(0)
+    , midiControlMode(0)
 {
     leslie1Buffers[0] = leslie1Buffers[1] = nullptr;
     leslie2Buffers[0] = leslie2Buffers[1] = nullptr;
@@ -102,7 +102,7 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
         auto msg = mmd.getMessage();
         if (msg.isSustainPedalOn())
         {
-            if (pedalLeslieMode == 1)
+            if (midiControlMode & 1)
             {
                 valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.8f);
                 leslie1.setSpeed(8.0f);
@@ -111,7 +111,7 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
         }
         else if (msg.isSustainPedalOff())
         {
-            if (pedalLeslieMode == 1)
+            if (midiControlMode & 1)
             {
                 valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.4f);
                 leslie1.setSpeed(4.0f);
@@ -121,7 +121,7 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
         else if (msg.isControllerOfType(1))
         {
             float cv = msg.getControllerValue() / 127.0f;
-            if (pedalLeslieMode == 2)
+            if (midiControlMode & 2)
             {
                 valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(cv > 0.5f ? 0.8f : 0.4f);
                 leslie1.setSpeed(8.0f * cv);
@@ -161,7 +161,7 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
 void MOrganCabProcessor::getStateInformation (MemoryBlock& destData)
 {
     std::unique_ptr<XmlElement> xml(valueTreeState.state.createXml());
-    xml->setAttribute("pedalLeslieMode", pedalLeslieMode);
+    xml->setAttribute("midiControlMode", midiControlMode);
     copyXmlToBinary(*xml, destData);
 }
 
@@ -171,7 +171,9 @@ void MOrganCabProcessor::setStateInformation (const void* data, int sizeInBytes)
     std::unique_ptr<XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
     if (xml && xml->hasTagName(valueTreeState.state.getType()))
     {
-        pedalLeslieMode = xml->getBoolAttribute("pedalLeslieMode", false);
+        if (xml->hasAttribute("pedalLeslieMode"))
+            midiControlMode = xml->getIntAttribute("pedalLeslieMode");
+        midiControlMode = xml->getIntAttribute("midiControlMode", false);
         valueTreeState.state = ValueTree::fromXml(*xml);
         sendChangeMessage();
     }

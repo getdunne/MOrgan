@@ -49,7 +49,7 @@ public:
     Leslie leslie1;
     mdaLeslie leslie2;
     bool fast;
-    int pedalLeslieMode;    // 0 = automation only, 1 = sustain, 2 = modwheel
+    int midiControlMode;    // 0 = automation only, 1 = sustain, 2 = modwheel, 3 = both
 
     // Respond to parameter changes
     void parameterChanged(const String&, float) override;
