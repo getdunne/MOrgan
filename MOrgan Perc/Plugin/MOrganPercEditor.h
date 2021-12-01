@@ -7,7 +7,7 @@
 class BackgroundBox : public Component
 {
 public:
-    BackgroundBox(Colour& bgc, Colour& olc) : bgColour(bgc), outlineColour(olc) {}
+    BackgroundBox(Colour bgc, Colour olc) : bgColour(bgc), outlineColour(olc) {}
 
     // Component
     void paint(Graphics& g) override
