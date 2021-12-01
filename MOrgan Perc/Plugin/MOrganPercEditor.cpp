@@ -69,9 +69,10 @@ MOrganPercEditor::~MOrganPercEditor()
 
 void MOrganPercEditor::enableOrDisableHammondControls()
 {
-    labeledLegatoTimeKnob.setEnabled(processor.triggerModeIsHammond());
-    labeledDecayRateKnob.setEnabled(processor.triggerModeIsHammond());
-    plot.setEnabled(processor.triggerModeIsHammond());
+    bool hammondMode = processor.triggerModeIsHammond();
+    labeledLegatoTimeKnob.setVisible(hammondMode);
+    labeledDecayRateKnob.setVisible(hammondMode);
+    plot.setVisible(hammondMode);
 }
 
 void MOrganPercEditor::resized()
