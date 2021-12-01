@@ -13,13 +13,16 @@ AudioProcessorEditor* MOrganPercProcessor::createEditor()
     return new MOrganPercEditor(*this);
 }
 
-// Constructor: start off assuming stereo input, stereo output
+// Constructor: we must give this at least an output bus, or we'll get zero-length buffers in processBlock()
 MOrganPercProcessor::MOrganPercProcessor()
-    : AudioProcessor(BusesProperties())
+    : AudioProcessor(BusesProperties().withOutput("output", AudioChannelSet::stereo()))
     , valueTreeState(*this, nullptr, Identifier("MOrganPerc"), MOrganPercParameters::createParameterLayout())
     , parameters(valueTreeState, this)
+    , triggerMode(0)
     , triggered(false)
     , triggerTimeMs(0)
+    , blockStart(0)
+    , samplesPerMSec(44.1)
 {
     memset(keyIsDown, 0, sizeof(keyIsDown));
     decay.exponentialCurve(0.0f, MOrganPercParameters::decayRateDefault, 1.0f, 0.0f);
@@ -28,7 +31,7 @@ MOrganPercProcessor::MOrganPercProcessor()
 bool MOrganPercProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
 {
     if (layout.inputBuses.size() > 0) return false;
-    if (layout.outputBuses.size() > 0) return false;
+    //if (layout.outputBuses.size() > 0) return false;
     return true;
 }
 
@@ -47,20 +50,39 @@ bool MOrganPercProcessor::keyDown(int nn, float& velFactor)
 {
     keyIsDown[nn] = true;
 
-    if (triggered)
+    if (triggerMode == 0)
     {
-        float millisSinceTrigger = float(Time::currentTimeMillis() - triggerTimeMs);
-        bool trigger = millisSinceTrigger < parameters.gateTimeMs;
-        if (trigger)
-            velFactor = decay.interp_bounded(millisSinceTrigger / parameters.gateTimeMs);
-        return trigger;
+        // Poly triggering: always allow
+        return true;
+    }
+    else if (triggerMode == 1)
+    {
+        // Simple Mono triggering
+        if (triggered) return false;
+        else
+        {
+            triggered = true;
+            return true;
+        }
     }
     else
     {
-        triggered = true;
-        triggerTimeMs = Time::currentTimeMillis();
-        velFactor = 1.0f;
-        return true;
+        // Hammond Perc triggering: use exponential decay circuit simulation
+        if (triggered)
+        {
+            float millisSinceTrigger = float(Time::currentTimeMillis() - triggerTimeMs);
+            bool trigger = millisSinceTrigger < parameters.legatoTimeMs;
+            if (trigger)
+                velFactor = decay.interp_bounded(millisSinceTrigger / parameters.legatoTimeMs);
+            return trigger;
+        }
+        else
+        {
+            triggered = true;
+            triggerTimeMs = Time::currentTimeMillis();
+            velFactor = 1.0f;
+            return true;
+        }
     }
 }
 
@@ -72,12 +94,30 @@ void MOrganPercProcessor::keyUp(int nn)
     if (triggered && !anyKeyDown) triggered = false;
 }
 
+void MOrganPercProcessor::scheduleMidiMessage(MidiMessage msg, double timeInSamples)
+{
+    ScheduledMidiMessage smsg(msg, uint64(timeInSamples));
+
+    auto it = midiList.begin();
+    for (; it != midiList.end(); it++)
+    {
+        if (it->samplePos > smsg.samplePos)
+        {
+            midiList.insert(it, smsg);
+            return;
+        }
+    }
+    if (it == midiList.end()) midiList.push_back(smsg);
+}
+
+void MOrganPercProcessor::prepareToPlay(double samplesPerSecond, int)
+{
+    samplesPerMSec = 0.001 * samplesPerSecond;
+}
+
 // Process one buffer ("block") of data
 void MOrganPercProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiIn)
 {
-    // the audio buffer in a midi effect will have zero channels!
-    jassert(buffer.getNumChannels() == 0);
-
     MidiBuffer midiOut;
     bool allowEvent = false;
 
@@ -85,27 +125,47 @@ void MOrganPercProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
     {
         auto msg = mmd.getMessage();
         auto samplePos = mmd.samplePosition;
+
         if (msg.isNoteOn())
         {
+            int ch = msg.getChannel();
             int nn = msg.getNoteNumber();
             float velFactor;
             allowEvent = keyDown(nn, velFactor);
             if (allowEvent)
             {
-                noteOnSent[nn] = true;
-                msg.multiplyVelocity(velFactor);
+                if (triggerMode == 2) msg.multiplyVelocity(velFactor);
+                midiOut.addEvent(msg, samplePos);
+                double endSamp = blockStart + samplePos + parameters.gateTimeMs * samplesPerMSec;
+                scheduleMidiMessage(MidiMessage::noteOff(ch, nn), endSamp);
             }
         }
         else if (msg.isNoteOff())
         {
             int nn = msg.getNoteNumber();
             keyUp(nn);
-            allowEvent = noteOnSent[nn];
-            noteOnSent[nn] = false;
         }
-
-        if (allowEvent) midiOut.addEvent(msg, samplePos);
     }
+
+    uint64 blockLength = buffer.getNumSamples();
+    uint64 blockEnd = blockStart + blockLength;
+    while (!midiList.empty())
+    {
+        auto& smsg = midiList.front();
+        if (smsg.samplePos < blockStart)
+        {
+            DBG("late " + smsg.getDescription());
+            midiList.pop_front();
+        }
+        if (smsg.samplePos >= blockStart && smsg.samplePos < blockEnd)
+        {
+            MidiMessage outMsg = MidiMessage(smsg.data, 3);
+            midiOut.addEvent(outMsg, int(smsg.samplePos - blockStart));
+            midiList.pop_front();
+        }
+        else break;
+    }
+    blockStart = blockEnd;
 
     midiIn.swapWith(midiOut);
 }
@@ -114,6 +174,7 @@ void MOrganPercProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
 void MOrganPercProcessor::getStateInformation (MemoryBlock& destData)
 {
     std::unique_ptr<XmlElement> xml(valueTreeState.state.createXml());
+    xml->setAttribute("triggerMode", triggerMode);
     copyXmlToBinary(*xml, destData);
 }
 
@@ -123,6 +184,8 @@ void MOrganPercProcessor::setStateInformation (const void* data, int sizeInBytes
     std::unique_ptr<XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
     if (xml && xml->hasTagName(valueTreeState.state.getType()))
     {
+        triggerMode = xml->getBoolAttribute("triggerMode");
+        xml->removeAttribute("triggerMode");
         valueTreeState.state = ValueTree::fromXml(*xml);
         sendChangeMessage();
     }

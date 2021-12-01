@@ -10,6 +10,11 @@ public:
 
     // Component
     void paint(Graphics&) override;
+    void setEnabled(bool en)
+    {
+        Component::setEnabled(en);
+        repaint();  // ensure graph appears/disappears
+    }
 
     // FunctionTablePlot
     void setTable(FunctionTable*);

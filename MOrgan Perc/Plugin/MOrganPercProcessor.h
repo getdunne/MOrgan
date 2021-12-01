@@ -31,7 +31,7 @@ public:
     void changeProgramName(int, const String&) override {}
 
     // Actual audio processing
-    void prepareToPlay(double /*sampleRate*/, int /*maxSamplesPerBlock*/) override {}
+    void prepareToPlay(double /*sampleRate*/, int /*maxSamplesPerBlock*/) override;
     void releaseResources() override {}
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
 
@@ -46,6 +46,10 @@ public:
     // Application's view of the AudioProcessorValueTreeState, including working parameter values
     MOrganPercParameters parameters;
 
+    // Non-APVTS parameters
+    int triggerMode; // 0 = polyphonic, 1 = simple mono, 2 = Hammond mono
+    bool triggerModeIsHammond() { return triggerMode == 2; }
+
     FunctionTable* getDecayTable() { return &decay; }
     
     // Respond to parameter changes
@@ -56,11 +60,33 @@ protected:
     void keyUp(int);
 
 private:
+    struct ScheduledMidiMessage
+    {
+        uint64 samplePos;
+        uint8 data[4];
+
+        ScheduledMidiMessage(MidiMessage& m, uint64 pos)
+        {
+            samplePos = pos;
+            auto p = m.getRawData();
+            memcpy(data, p, 3);
+        }
+
+        String getDescription()
+        {
+            return MidiMessage(data, 3).getDescription() + " time " + String(samplePos);
+        }
+    };
+    std::list<ScheduledMidiMessage> midiList;
+    void scheduleMidiMessage(MidiMessage msg, double timeInSamples);
+
     bool keyIsDown[128];
-    bool noteOnSent[128];
     bool triggered;
     int64 triggerTimeMs;
     FunctionTable decay;
+
+    uint64 blockStart;
+    double samplesPerMSec;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MOrganPercProcessor)
 };
