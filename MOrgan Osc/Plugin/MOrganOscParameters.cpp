@@ -108,8 +108,8 @@ const float MOrganOscParameters::ampReleaseStep = 0.001f;
 const String MOrganOscParameters::masterVolumeID = "masterVolume";
 const String MOrganOscParameters::masterVolumeName = TRANS("Volume");
 const String MOrganOscParameters::masterVolumeLabel = "dB";
-const float MOrganOscParameters::masterVolumeMin = -12.0f;
-const float MOrganOscParameters::masterVolumeMax = 12.0f;
+const float MOrganOscParameters::masterVolumeMin = -48.0f;
+const float MOrganOscParameters::masterVolumeMax = 18.0f;
 const float MOrganOscParameters::masterVolumeDefault = 0.0f;
 const float MOrganOscParameters::masterVolumeStep = 0.1f;
 
@@ -250,7 +250,7 @@ MOrganOscParameters::MOrganOscParameters(AudioProcessorValueTreeState& vts,
     , ampDecayListener(ampDecaySec)
     , ampSustainListener(ampSustainLevel, 0.01f)
     , ampReleaseListener(ampReleaseSec)
-    , masterVolumeListener(masterVolFraction)
+    , masterVolumeListener(masterVolFraction, masterVolumeMin)
 {
     valueTreeState.addParameterListener(drawbar1ID, processorAsListener);
     valueTreeState.addParameterListener(drawbar2ID, processorAsListener);

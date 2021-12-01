@@ -67,7 +67,7 @@ MOrganOscEditor::MOrganOscEditor (MOrganOscProcessor& p)
     ampReleaseKnob.setDoubleClickReturnValue(true, double(MOrganOscParameters::ampReleaseDefault), ModifierKeys::noModifiers);
     addAndMakeVisible(labeledAmpReleaseKnob);
 
-    masterVolumeKnob.setFillColour(Colour(108, 20, 21).darker(0.5f));
+    masterVolumeKnob.setFillColour(Colour(108, 20, 21).withRotatedHue(0.5f).darker());
     masterVolumeKnob.setDoubleClickReturnValue(true, double(MOrganOscParameters::masterVolumeDefault), ModifierKeys::noModifiers);
     addAndMakeVisible(labeledMasterVolumeKnob);
 
@@ -115,8 +115,8 @@ void MOrganOscEditor::resized()
     vibratoToggle.setBounds(col.removeFromTop(24));
     infoButton.setBounds(col.removeFromBottom(24));
 
-    row.removeFromLeft(20);
-    row.removeFromRight(logoImage.getWidth() + 20);
+    row.removeFromLeft(10);
+    row.removeFromRight(logoImage.getWidth() + 16);
     auto knobWidth = (row.getWidth() - 10) / 5;
     labeledAmpAttackKnob.setBounds(row.removeFromLeft(knobWidth));
     labeledAmpDecayKnob.setBounds(row.removeFromLeft(knobWidth));
