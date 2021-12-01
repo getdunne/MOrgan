@@ -22,6 +22,7 @@ MOrganOscProcessor::MOrganOscProcessor()
     , enableModwheelVibrato(false)
     , valueTreeState(*this, nullptr, Identifier("MOrganOsc"), MOrganOscParameters::createParameterLayout())
     , parameters(valueTreeState, this)
+    , prevMasterVolFraction(parameters.masterVolFraction)
 {
 }
 
@@ -138,7 +139,8 @@ void MOrganOscProcessor::processBlock (AudioBuffer<float>& audioBuffer, MidiBuff
         bufs[1] += chunkSize;
     }
 
-    audioBuffer.applyGain(parameters.masterVolFraction);
+    audioBuffer.applyGainRamp(0, numSamples, prevMasterVolFraction, parameters.masterVolFraction);
+    prevMasterVolFraction = parameters.masterVolFraction;
 }
 
 std::unique_ptr<XmlElement> MOrganOscProcessor::getStateXml()

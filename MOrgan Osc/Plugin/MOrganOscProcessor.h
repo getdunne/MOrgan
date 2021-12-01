@@ -53,6 +53,8 @@ public:
     void parameterChanged(const String&, float) override;
 
 private:
+    float prevMasterVolFraction;
+
     std::unique_ptr<XmlElement> getStateXml();
     void setStateXml(XmlElement*);
 
