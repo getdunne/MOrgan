@@ -18,8 +18,8 @@ The basic MOrgan plug-in collection comprises three plug-ins as follows:
 2. **MOrgan Cab** is an audio-effect plug-in, which processes incoming audio using two different *rotary speaker* models, reminiscent of the type of ["Leslie" speaker cabinet system](https://en.wikipedia.org/wiki/Leslie_speaker) often used with Hammond organs.
    - The first model adapts code from the [setBfree project](https://setbfree.org/) (see e.g. https://github.com/pantherb/setBfree), which was itself based on the paper "[Discrete Time Emulation of the Leslie Speaker](https://www.aes.org/e-lib/browse.cfm?elib=15120)" by Jorge Herrera, Craig Hanson, and Jonathan S. Abel, Presented at the 127th Convention of the Audio Engineering Society, 2009 October 9–12 New York NY, USA.
    - The second model uses code originally developed by Paul Kellett as part of the [mda-vst project](http://mda.smartelectronix.com/) (see also https://github.com/topics/mda-plugins). Although the MDA Leslie effect was not a true Leslie speaker emulation, it works nicely in conjunction with the more realistic *setBfree* version.
-   - The plug-in includes a simple mixer to set the levels of the direct (unprocessed) signal and of the two separate Leslie effects.
-3. **MOrgan Perc** is a MIDI-effect plug-in which can be routed before any instrument plug-in, allowing it to behave similarly to the characteristic "percussion" system of the classic Hammond organ models, which was unique in that it was both *polyphonic* and *mono-triggered*. The first MIDI note-on event after a no-keys-down condition passes through the plug-in, and triggers a timed *gate*. Subsequent note-on events will only pass through the plug-in if they follow the trigger within a preset *gate time*, and furthermore, their MIDI velocity values will be reduced according to an *exponential decay curve* which roughly models the response of the Hammond percussion circuit.
+   - The plug-in includes a simple mixer to set the levels of the direct (unprocessed) signal and of the two separate Leslie effects, and some options for MIDI control of Leslie rotation speed.
+3. **MOrgan Perc** is a MIDI-effect plug-in which can be routed before any instrument plug-in, to facilitate its use as a "click" or "percussion" sound, as in classic Hammond organ models. It serves to illustrate how useful MIDI-effects (which produce no sound of their own, only process MIDI) can be.
 
 ## Downloading and using the MOrgan plug-ins
 
@@ -41,7 +41,7 @@ The rotary-speaker emulation code from the [setBfree project](https://setbfree.o
 
 It is up to you to familiarize yourself with the legal ramifications of how you choose to use this code. Shane Dunne and Shane Dunne & Associates, Inc. provides this code *on an as-is basis, with no warranty of any kind*, and *will not be responsible for any legal consequences arising from your own use of the source code*.
 
-Note **VST is a registered trademark of Steinberg Media Technologies GmbH**.
+**VST is a registered trademark of Steinberg Media Technologies GmbH**.
 
 ## Dependencies
 

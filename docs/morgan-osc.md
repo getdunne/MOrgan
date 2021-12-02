@@ -31,9 +31,15 @@ Each knob also has a designated *default value*.
   - The nonzero attack and release times avoid unpleasant clicks in the output.
 - Double-clicking any knob reverts the parameter to its default value.
 
-#### Pedal sustain checkbox
+#### Master volume knob
+
+The *Volume* knob is calibrated from -48 dB (effectively zero volume) to +18 dB. This is primarily there to adjust the overall volume to compensate for different numbers of drawbars being used, but can also be used to fade the total sound-level down to silence when required.
+
+#### Pedal sustain and MW vibrato checkboxes
 
 As is conventional for organs, the synthesizer normally does not respond to MIDI sustain-pedal (CC#64), but if you check the *Pedal Sustain* box, notes will be held while the sustain pedal is down.
+
+Checking the *MW vibrato* box allows use of the mod wheel (CC#1) to add a light vibrato.
 
 ## Automation parameters
 
