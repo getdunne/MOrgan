@@ -24,6 +24,15 @@ MOrganOscProcessor::MOrganOscProcessor()
     , parameters(valueTreeState, this)
     , prevMasterVolFraction(parameters.masterVolFraction)
 {
+    smoothed[0].setCurrentAndTargetValue(parameters.drawbar1);
+    smoothed[1].setCurrentAndTargetValue(parameters.drawbar2);
+    smoothed[2].setCurrentAndTargetValue(parameters.drawbar3);
+    smoothed[3].setCurrentAndTargetValue(parameters.drawbar4);
+    smoothed[4].setCurrentAndTargetValue(parameters.drawbar5);
+    smoothed[5].setCurrentAndTargetValue(parameters.drawbar6);
+    smoothed[6].setCurrentAndTargetValue(parameters.drawbar7);
+    smoothed[7].setCurrentAndTargetValue(parameters.drawbar8);
+    smoothed[8].setCurrentAndTargetValue(parameters.drawbar9);
 }
 
 bool MOrganOscProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
@@ -38,23 +47,23 @@ bool MOrganOscProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
 void MOrganOscProcessor::parameterChanged(const String& paramID, float newValue)
 {
     if (paramID == MOrganOscParameters::drawbar1ID)
-        synth.setDrawBar(0, 0.01f * newValue);
+        smoothed[0].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar2ID)
-        synth.setDrawBar(1, 0.01f * newValue);
+        smoothed[1].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar3ID)
-        synth.setDrawBar(2, 0.01f * newValue);
+        smoothed[2].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar4ID)
-        synth.setDrawBar(3, 0.01f * newValue);
+        smoothed[3].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar5ID)
-        synth.setDrawBar(4, 0.01f * newValue);
+        smoothed[4].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar6ID)
-        synth.setDrawBar(5, 0.01f * newValue);
+        smoothed[5].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar7ID)
-        synth.setDrawBar(6, 0.01f * newValue);
+        smoothed[6].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar8ID)
-        synth.setDrawBar(7, 0.01f * newValue);
+        smoothed[7].setTargetValue(0.01f * newValue);
     else if (paramID == MOrganOscParameters::drawbar9ID)
-        synth.setDrawBar(8, 0.01f * newValue);
+        smoothed[8].setTargetValue(0.01f * newValue);
 
     else if (paramID == MOrganOscParameters::ampAttackID)
         synth.setAmpAttackDurationSeconds(newValue);
@@ -71,6 +80,7 @@ void MOrganOscProcessor::prepareToPlay (double sampleRate, int /*maxSamplesPerBl
 {
     releaseResources();
     synth.init(sampleRate);
+    for (int i = 0; i < 9; i++) smoothed[i].reset(sampleRate / AKSYNTH_CHUNKSIZE, 0.1);
 }
 
 // Audio processing finished; release any allocated memory
@@ -122,6 +132,7 @@ void MOrganOscProcessor::processBlock (AudioBuffer<float>& audioBuffer, MidiBuff
     int numSamples = audioBuffer.getNumSamples();
     midiBuffer.clear(0, numSamples);
 
+
     // render synth
     int channelCount = audioBuffer.getNumChannels();
     float* bufs[2] = { audioBuffer.getWritePointer(0), audioBuffer.getWritePointer(1) };
@@ -133,6 +144,8 @@ void MOrganOscProcessor::processBlock (AudioBuffer<float>& audioBuffer, MidiBuff
     while (samplesRemaining)
     {
         if (samplesRemaining < chunkSize) chunkSize = samplesRemaining;
+        for (int i = 0; i < 9; i++)
+            if (smoothed[i].isSmoothing()) synth.setDrawBar(i, smoothed[i].getNextValue());
         synth.render(channelCount, chunkSize, bufs);
         samplesRemaining -= chunkSize;
         bufs[0] += chunkSize;

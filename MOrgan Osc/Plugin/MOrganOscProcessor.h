@@ -52,6 +52,9 @@ public:
     // Respond to parameter changes
     void parameterChanged(const String&, float) override;
 
+protected:
+    LinearSmoothedValue<float> smoothed[9];
+
 private:
     float prevMasterVolFraction;
 
