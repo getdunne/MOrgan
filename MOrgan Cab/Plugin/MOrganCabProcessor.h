@@ -59,5 +59,7 @@ private:
     float* leslie1Buffers[2];
     float* leslie2Buffers[2];
 
+    float directMix, les1Mix, les2Mix;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MOrganCabProcessor)
 };

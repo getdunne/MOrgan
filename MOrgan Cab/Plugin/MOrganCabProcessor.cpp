@@ -23,6 +23,9 @@ MOrganCabProcessor::MOrganCabProcessor()
     , parameters(valueTreeState, this)
     , fast(false)
     , midiControlMode(0)
+    , directMix(parameters.direct)
+    , les1Mix(parameters.leslie1)
+    , les2Mix(parameters.leslie2)
 {
     leslie1Buffers[0] = leslie1Buffers[1] = nullptr;
     leslie2Buffers[0] = leslie2Buffers[1] = nullptr;
@@ -146,15 +149,25 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
     const float* pLes1R = leslie1Buffers[1];
     const float* pLes2L = leslie2Buffers[0];
     const float* pLes2R = leslie2Buffers[1];
+
+    float dd = (parameters.direct - directMix) / numSamples;
+    float d1 = (parameters.leslie1 - les1Mix) / numSamples;
+    float d2 = (parameters.leslie2 - les2Mix) / numSamples;
     for (int i = 0; i < numSamples; i++, pOutL++, pOutR++)
     {
-        *pOutL = *pSynthL++ * parameters.direct;
-        *pOutR = *pSynthR++ * parameters.direct;
-        *pOutL += *pLes1L++ * parameters.leslie1;
-        *pOutR += *pLes1R++ * parameters.leslie1;
-        *pOutL += *pLes2L++ * parameters.leslie2;
-        *pOutR += *pLes2R++ * parameters.leslie2;
+        *pOutL = *pSynthL++ * directMix;
+        *pOutR = *pSynthR++ * directMix;
+        *pOutL += *pLes1L++ * les1Mix;
+        *pOutR += *pLes1R++ * les1Mix;
+        *pOutL += *pLes2L++ * les2Mix;
+        *pOutR += *pLes2R++ * les2Mix;
+        directMix += dd;
+        les1Mix += d1;
+        les2Mix += d2;
     }
+    directMix = parameters.direct;
+    les1Mix = parameters.leslie1;
+    les2Mix = parameters.leslie2;
 }
 
 // Called by the host when it needs to persist the current plugin state
