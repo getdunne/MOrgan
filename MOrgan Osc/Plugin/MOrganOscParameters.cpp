@@ -2,7 +2,7 @@
 
 // Drawbar-16
 const String MOrganOscParameters::drawbar1ID = "drawbar1";
-const String MOrganOscParameters::drawbar1Name = TRANS("16");
+const String MOrganOscParameters::drawbar1Name = TRANS("Drawbar 16 ft");
 const String MOrganOscParameters::drawbar1Label = "%";
 const float MOrganOscParameters::drawbar1Min = 0.0f;
 const float MOrganOscParameters::drawbar1Max = 100.0f;
@@ -10,7 +10,7 @@ const float MOrganOscParameters::drawbar1Default = 0.0f;
 const float MOrganOscParameters::drawbar1Step = 0.0f;
 // Drawbar-5-13
 const String MOrganOscParameters::drawbar2ID = "drawbar2";
-const String MOrganOscParameters::drawbar2Name = TRANS("5-1_3");
+const String MOrganOscParameters::drawbar2Name = TRANS("Drawbar 5 1-3 ft");
 const String MOrganOscParameters::drawbar2Label = "%";
 const float MOrganOscParameters::drawbar2Min = 0.0f;
 const float MOrganOscParameters::drawbar2Max = 100.0f;
@@ -18,7 +18,7 @@ const float MOrganOscParameters::drawbar2Default = 0.0f;
 const float MOrganOscParameters::drawbar2Step = 0.0f;
 // Drawbar-8
 const String MOrganOscParameters::drawbar3ID = "drawbar3";
-const String MOrganOscParameters::drawbar3Name = TRANS("8");
+const String MOrganOscParameters::drawbar3Name = TRANS("Drawbar 8 ft");
 const String MOrganOscParameters::drawbar3Label = "%";
 const float MOrganOscParameters::drawbar3Min = 0.0f;
 const float MOrganOscParameters::drawbar3Max = 100.0f;
@@ -26,7 +26,7 @@ const float MOrganOscParameters::drawbar3Default = 100.0f;
 const float MOrganOscParameters::drawbar3Step = 0.0f;
 // Drawbar-4
 const String MOrganOscParameters::drawbar4ID = "drawbar4";
-const String MOrganOscParameters::drawbar4Name = TRANS("4");
+const String MOrganOscParameters::drawbar4Name = TRANS("Drawbar 4 ft");
 const String MOrganOscParameters::drawbar4Label = "%";
 const float MOrganOscParameters::drawbar4Min = 0.0f;
 const float MOrganOscParameters::drawbar4Max = 100.0f;
@@ -34,7 +34,7 @@ const float MOrganOscParameters::drawbar4Default = 0.0f;
 const float MOrganOscParameters::drawbar4Step = 0.0f;
 // Drawbar-2-23
 const String MOrganOscParameters::drawbar5ID = "drawbar5";
-const String MOrganOscParameters::drawbar5Name = TRANS("2-2_3");
+const String MOrganOscParameters::drawbar5Name = TRANS("Drawbar 2 2-3 ft");
 const String MOrganOscParameters::drawbar5Label = "%";
 const float MOrganOscParameters::drawbar5Min = 0.0f;
 const float MOrganOscParameters::drawbar5Max = 100.0f;
@@ -42,7 +42,7 @@ const float MOrganOscParameters::drawbar5Default = 0.0f;
 const float MOrganOscParameters::drawbar5Step = 0.0f;
 // Drawbar-2
 const String MOrganOscParameters::drawbar6ID = "drawbar6";
-const String MOrganOscParameters::drawbar6Name = TRANS("2");
+const String MOrganOscParameters::drawbar6Name = TRANS("Drawbar 2 ft");
 const String MOrganOscParameters::drawbar6Label = "%";
 const float MOrganOscParameters::drawbar6Min = 0.0f;
 const float MOrganOscParameters::drawbar6Max = 100.0f;
@@ -50,7 +50,7 @@ const float MOrganOscParameters::drawbar6Default = 0.0f;
 const float MOrganOscParameters::drawbar6Step = 0.0f;
 // Drawbar1-35
 const String MOrganOscParameters::drawbar7ID = "drawbar7";
-const String MOrganOscParameters::drawbar7Name = TRANS("1-3_5");
+const String MOrganOscParameters::drawbar7Name = TRANS("Drawbar 1 3-5 ft");
 const String MOrganOscParameters::drawbar7Label = "%";
 const float MOrganOscParameters::drawbar7Min = 0.0f;
 const float MOrganOscParameters::drawbar7Max = 100.0f;
@@ -58,7 +58,7 @@ const float MOrganOscParameters::drawbar7Default = 0.0f;
 const float MOrganOscParameters::drawbar7Step = 0.0f;
 // Drawbar1-13
 const String MOrganOscParameters::drawbar8ID = "drawbar8";
-const String MOrganOscParameters::drawbar8Name = TRANS("1-1_3");
+const String MOrganOscParameters::drawbar8Name = TRANS("Drawbar 1 1-3 ft");
 const String MOrganOscParameters::drawbar8Label = "%";
 const float MOrganOscParameters::drawbar8Min = 0.0f;
 const float MOrganOscParameters::drawbar8Max = 100.0f;
@@ -66,7 +66,7 @@ const float MOrganOscParameters::drawbar8Default = 0.0f;
 const float MOrganOscParameters::drawbar8Step = 0.0f;
 // Drawbar1
 const String MOrganOscParameters::drawbar9ID = "drawbar9";
-const String MOrganOscParameters::drawbar9Name = TRANS("1");
+const String MOrganOscParameters::drawbar9Name = TRANS("Drawbar 1 ft");
 const String MOrganOscParameters::drawbar9Label = "%";
 const float MOrganOscParameters::drawbar9Min = 0.0f;
 const float MOrganOscParameters::drawbar9Max = 100.0f;
