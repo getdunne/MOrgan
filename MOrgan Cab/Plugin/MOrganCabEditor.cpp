@@ -34,14 +34,19 @@ MOrganCabEditor::MOrganCabEditor (MOrganCabProcessor& p)
     midiModeLabel.setText("MIDI Control", NotificationType::dontSendNotification);
     midiModeLabel.attachToComponent(&midiModeCombo, true);
 
-    midiModeCombo.addItem("None", 1);
-    midiModeCombo.addItem("Sustain Pedal", 2);
-    midiModeCombo.addItem("Mod Wheel", 3);
-    midiModeCombo.addItem("Sustain+MW", 4);
+    int id = 0;
+    midiModeCombo.addItem("None", ++id);
+    midiModeCombo.addItem("Sustain Pedal", ++id);
+    midiModeCombo.addItem("Mod Wheel", ++id);
+    midiModeCombo.addItem("Sus + MW", ++id);
+    midiModeCombo.addItem("Sus Toggle", ++id);
+    midiModeCombo.addItem("MW Toggle", ++id);
+    midiModeCombo.addItem("Sus+MW Toggle", ++id);
+
     midiModeCombo.setSelectedItemIndex(processor.midiControlMode);
     midiModeCombo.onChange = [this]()
     {
-        processor.midiControlMode = midiModeCombo.getSelectedItemIndex();
+        processor.midiControlMode = MOrganCabProcessor::MidiControlMode(midiModeCombo.getSelectedItemIndex());
     };
     addAndMakeVisible(midiModeCombo);
 

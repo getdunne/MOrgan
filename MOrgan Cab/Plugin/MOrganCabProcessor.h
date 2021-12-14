@@ -49,10 +49,20 @@ public:
     Leslie leslie1;
     mdaLeslie leslie2;
     bool fast;
-    int midiControlMode;    // 0 = automation only, 1 = sustain, 2 = modwheel, 3 = both
+    enum MidiControlMode
+    {
+        automationOnly = 0,
+        sustainPedal, modWheel, susAndModWheel,
+        sustainToggle, modToggle, susAndModToggle
+    } midiControlMode;
 
     // Respond to parameter changes
     void parameterChanged(const String&, float) override;
+
+protected:
+    void spinUp();
+    void spinDown();
+    void toggleSpeed();
 
 private:
     int bufferSize;
@@ -60,6 +70,7 @@ private:
     float* leslie2Buffers[2];
 
     float directMix, les1Mix, les2Mix;
+    int prevModWheelValue;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MOrganCabProcessor)
 };

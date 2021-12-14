@@ -22,13 +22,23 @@ MOrganCabProcessor::MOrganCabProcessor()
     , valueTreeState(*this, nullptr, Identifier("MOrganCab"), MOrganCabParameters::createParameterLayout())
     , parameters(valueTreeState, this)
     , fast(false)
-    , midiControlMode(0)
+    , midiControlMode(automationOnly)
     , directMix(parameters.direct)
     , les1Mix(parameters.leslie1)
     , les2Mix(parameters.leslie2)
+    , prevModWheelValue(0)
 {
     leslie1Buffers[0] = leslie1Buffers[1] = nullptr;
     leslie2Buffers[0] = leslie2Buffers[1] = nullptr;
+}
+
+// Destructor
+MOrganCabProcessor::~MOrganCabProcessor()
+{
+    leslie1.deinit();
+    leslie2.deinit();
+    if (leslie1Buffers[0]) delete leslie1Buffers[0];
+    if (leslie2Buffers[0]) delete leslie2Buffers[0];
 }
 
 bool MOrganCabProcessor::isBusesLayoutSupported(const BusesLayout& layout) const
@@ -63,13 +73,26 @@ void MOrganCabProcessor::parameterChanged(const String& whatChanged, float newVa
     }
 }
 
-// Destructor
-MOrganCabProcessor::~MOrganCabProcessor()
+void MOrganCabProcessor::spinUp()
 {
-    leslie1.deinit();
-    leslie2.deinit();
-    if (leslie1Buffers[0]) delete leslie1Buffers[0];
-    if (leslie2Buffers[0]) delete leslie2Buffers[0];
+    valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.8f);
+    leslie1.setSpeed(8.0f);
+    leslie2.fast();
+}
+
+void MOrganCabProcessor::spinDown()
+{
+    valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.4f);
+    leslie1.setSpeed(4.0f);
+    leslie2.slow();
+}
+
+void MOrganCabProcessor::toggleSpeed()
+{
+    if (leslie1.getSpeed() < 8.0f)
+        spinUp();
+    else
+        spinDown();
 }
 
 // Prepare to process audio (always called at least once before processBlock)
@@ -105,31 +128,32 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
         auto msg = mmd.getMessage();
         if (msg.isSustainPedalOn())
         {
-            if (midiControlMode & 1)
-            {
-                valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.8f);
-                leslie1.setSpeed(8.0f);
-                leslie2.fast();
-            }
+            if ((midiControlMode == sustainToggle) || (midiControlMode == susAndModToggle))
+                toggleSpeed();
+            else if ((midiControlMode == sustainPedal) || (midiControlMode == susAndModWheel))
+                spinUp();
         }
         else if (msg.isSustainPedalOff())
         {
-            if (midiControlMode & 1)
-            {
-                valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(0.4f);
-                leslie1.setSpeed(4.0f);
-                leslie2.slow();
-            }
+            if ((midiControlMode == sustainPedal) || (midiControlMode == susAndModWheel))
+                spinDown();
         }
         else if (msg.isControllerOfType(1))
         {
-            float cv = msg.getControllerValue() / 127.0f;
-            if (midiControlMode & 2)
+            int modWheelValue = msg.getControllerValue();
+            if ((midiControlMode == modWheel) || (midiControlMode == susAndModWheel))
             {
-                valueTreeState.getParameter(MOrganCabParameters::speedID)->setValueNotifyingHost(cv > 0.5f ? 0.8f : 0.4f);
-                leslie1.setSpeed(8.0f * cv);
-                leslie2.setSpeed(cv);
+                if ((modWheelValue > 63) && (prevModWheelValue < 64))
+                    spinUp();
+                else if ((modWheelValue < 64) && (prevModWheelValue > 63))
+                    spinDown();
             }
+            else if ((midiControlMode == modToggle) || (midiControlMode == susAndModToggle))
+            {
+                if ((modWheelValue > 63) && (prevModWheelValue < 64))
+                    toggleSpeed();
+            }
+            prevModWheelValue = modWheelValue;
         }
     }
     int numSamples = audioBuffer.getNumSamples();
@@ -174,7 +198,7 @@ void MOrganCabProcessor::processBlock(AudioBuffer<float>& audioBuffer, MidiBuffe
 void MOrganCabProcessor::getStateInformation (MemoryBlock& destData)
 {
     std::unique_ptr<XmlElement> xml(valueTreeState.state.createXml());
-    xml->setAttribute("midiControlMode", midiControlMode);
+    xml->setAttribute("midiControlMode", int(midiControlMode));
     copyXmlToBinary(*xml, destData);
 }
 
@@ -185,8 +209,8 @@ void MOrganCabProcessor::setStateInformation (const void* data, int sizeInBytes)
     if (xml && xml->hasTagName(valueTreeState.state.getType()))
     {
         if (xml->hasAttribute("pedalLeslieMode"))
-            midiControlMode = xml->getIntAttribute("pedalLeslieMode");
-        midiControlMode = xml->getIntAttribute("midiControlMode", false);
+            midiControlMode = MidiControlMode(xml->getIntAttribute("pedalLeslieMode"));
+        midiControlMode = MidiControlMode(xml->getIntAttribute("midiControlMode"));
         valueTreeState.state = ValueTree::fromXml(*xml);
         sendChangeMessage();
     }
