@@ -184,7 +184,7 @@ void MOrganPercProcessor::setStateInformation (const void* data, int sizeInBytes
     std::unique_ptr<XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
     if (xml && xml->hasTagName(valueTreeState.state.getType()))
     {
-        triggerMode = xml->getBoolAttribute("triggerMode");
+        triggerMode = xml->getIntAttribute("triggerMode");
         xml->removeAttribute("triggerMode");
         valueTreeState.state = ValueTree::fromXml(*xml);
         sendChangeMessage();
