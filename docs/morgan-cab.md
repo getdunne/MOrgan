@@ -22,6 +22,7 @@ The **MOrgan Cab** GUI is shown above. It consists of a pair of *speed controls*
   - **Sustain Pedal**: pressing the MIDI sustain pedal (CC#64 value goes above 63) spins UP, releasing the pedal (CC#64 goes below 64) spins DOWN.
   - **Mod Wheel**: as for sustain pedal, but CC#1 (mod wheel) controls the effect.
   - **Sustain+MW**: speed responds to either/both of CC#1 and CC#64.
+  - **Sus Toggle**, **MW Toggle**, and **Sus+MW Toggle** are like the above three, but toggle between the two speeds each time the selected MIDI CC value goes above 63.
 
 #### Mix knobs
 

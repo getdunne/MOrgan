@@ -45,5 +45,5 @@ Checking the *MW vibrato* box allows use of the mod wheel (CC#1) to add a light 
 
 The *MOrgan Osc* plug-in exposes the nine drawbar parameters and the four ADSR envelope parameters for host automation. The parameter names are as follows:
 
-- *Drawbars* are called *16*, *5-1_3*, *8*, *4*, *2-2_3*, *2*, *1-3_5*, *1-2/3*, and *1*.
+- *Drawbars* are called *Drawbar 16 ft*, *Drawbar 5 1-3 ft*, *Drawbar 8 ft*, *Drawbar 4 ft*, *Drawbar 2 2-3 ft*, *Drawbar 2 ft*, *Drawbar 1 3-5 ft*, *Drawbar 1 1-3 ft*, and *Drawbar 1 ft*.
 - *Envelope parameters* are called *Attack*, *Decay*, *Sustain*, and *Release*.

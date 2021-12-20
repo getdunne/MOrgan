@@ -31,6 +31,7 @@ The triggering cluster consists of a consists of a pop-up menu to select one of 
 
 #### Timing knobs
 
+- The **Note Length** knob controls the length of the triggered note (i.e., the time difference between the generated MIDI note-on and the corresponding note-off). It is calibrated in milliseconds, with a range of 10 to 250 msec, and a default value of 50 msec.
 - The **Window** knob controls the internal one-shot oscillator's cycle time. It is calibrated in milliseconds, with a range of 50 to 250 msec, and a default value of 150 msec.
 - The **Decay** knob controls the curvature of the oscillator's exponential decay. It is calibrated in arbitrary units from 0.05 (nearly linear) to 10.0 (very curved), with default value 2.5.
 
@@ -51,4 +52,4 @@ The graph displays a curve illustrating the current shape of the internal oscill
 
 ## Automation parameters
 
-The **MOrgan Perc** plug-in exposes *Gate Time* and *Decay Rate* parameters, so named.
+The **MOrgan Perc** plug-in exposes *Note Length*, *Window* and *Decay* parameters, so named.
